@@ -1,13 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { memoryVariants } from './variants';
+import PlayerSettingsDialog, { PlayerSetting } from './components/PlayerSettingsDialog';
+import SettingsButton from './components/SettingsButton';
+
+const defaultPlayers: PlayerSetting[] = [
+  { name: 'שחקן 1', color: '#2196f3' },
+  { name: 'שחקן 2', color: '#43a047' }
+];
 
 function App() {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [players, setPlayers] = useState<PlayerSetting[]>(defaultPlayers);
+
   return (
-    <Container maxWidth="sm" sx={{ py: 6 }}>
+    <Container maxWidth="sm" sx={{ py: 6, position: 'relative' }}>
+      <SettingsButton onClick={() => setSettingsOpen(true)} />
+      <PlayerSettingsDialog
+        open={settingsOpen}
+        players={players}
+        onClose={() => setSettingsOpen(false)}
+        onSave={setPlayers}
+      />
       <Box textAlign="center" mb={4}>
         <Typography variant="h3" fontWeight={700} gutterBottom>
           משחקי זיכרון
