@@ -1,25 +1,41 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import { memoryVariants } from './variants';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container maxWidth="sm" sx={{ py: 6 }}>
+      <Box textAlign="center" mb={4}>
+        <Typography variant="h3" fontWeight={700} gutterBottom>
+          משחקי זיכרון
+        </Typography>
+        <Typography color="text.secondary" fontSize={20}>
+          בחרו משחק מהרשימה:
+        </Typography>
+      </Box>
+      <Box display="flex" flexDirection="column" gap={2}>
+        {memoryVariants.map(variant => (
+          <Button
+            key={variant.id}
+            variant="contained"
+            color="primary"
+            sx={{ fontSize: 20, borderRadius: 3, py: 2 }}
+            // onClick={() => ...}
+            disabled
+          >
+            {variant.name}
+          </Button>
+        ))}
+      </Box>
+      <Box mt={6} textAlign="center">
+        <Typography color="text.secondary" fontSize={14}>
+          גרסה ראשונית - בקרוב כל משחק יופעל!
+        </Typography>
+      </Box>
+    </Container>
   );
 }
 
