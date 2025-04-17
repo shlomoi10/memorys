@@ -1,58 +1,55 @@
 import React, { useState } from 'react';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import { memoryVariants } from './variants';
-import PlayerSettingsDialog, { PlayerSetting } from './components/PlayerSettingsDialog';
-import SettingsButton from './components/SettingsButton';
+import GameLayout from './layout/GameLayout';
+import GameSidebar from './components/GameSidebar';
+import ResponsiveBoard from './components/ResponsiveBoard';
 
-const defaultPlayers: PlayerSetting[] = [
-  { name: 'שחקן 1', color: '#2196f3' },
-  { name: 'שחקן 2', color: '#43a047' }
-];
+const BOARD_ROWS = 4;
+const BOARD_COLS = 4;
+const DEFAULT_CARD_SIZE = 120;
 
 function App() {
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const [players, setPlayers] = useState<PlayerSetting[]>(defaultPlayers);
+  const [cardSize, setCardSize] = useState(DEFAULT_CARD_SIZE);
+  const [currentPlayer, setCurrentPlayer] = useState('שחקן 1');
+  const [timer, setTimer] = useState('00:00');
+
+  // דמו: קלפים ריקים
+  const cards = Array.from({ length: BOARD_ROWS * BOARD_COLS }, (_, i) => (
+    <div
+      key={i}
+      style={{
+        width: cardSize,
+        height: cardSize,
+        background: '#fff',
+        borderRadius: 12,
+        boxShadow: '0 1px 4px #e3eaf1',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: cardSize * 0.45,
+        fontWeight: 700,
+        color: '#2196f3',
+        userSelect: 'none',
+      }}
+    >
+      ?
+    </div>
+  ));
 
   return (
-    <Container maxWidth="sm" sx={{ py: 6, position: 'relative' }}>
-      <SettingsButton onClick={() => setSettingsOpen(true)} />
-      <PlayerSettingsDialog
-        open={settingsOpen}
-        players={players}
-        onClose={() => setSettingsOpen(false)}
-        onSave={setPlayers}
-      />
-      <Box textAlign="center" mb={4}>
-        <Typography variant="h3" fontWeight={700} gutterBottom>
-          משחקי זיכרון
-        </Typography>
-        <Typography color="text.secondary" fontSize={20}>
-          בחרו משחק מהרשימה:
-        </Typography>
-      </Box>
-      <Box display="flex" flexDirection="column" gap={2}>
-        {memoryVariants.map(variant => (
-          <Button
-            key={variant.id}
-            variant="contained"
-            color="primary"
-            sx={{ fontSize: 20, borderRadius: 3, py: 2 }}
-            // onClick={() => ...}
-            disabled
-          >
-            {variant.name}
-          </Button>
-        ))}
-      </Box>
-      <Box mt={6} textAlign="center">
-        <Typography color="text.secondary" fontSize={14}>
-          גרסה ראשונית - בקרוב כל משחק יופעל!
-        </Typography>
-      </Box>
-    </Container>
+    <GameLayout
+      sidebar={
+        <GameSidebar
+          currentPlayer={currentPlayer}
+          timer={timer}
+          cardSize={cardSize}
+          onCardSizeChange={setCardSize}
+        />
+      }
+    >
+      <ResponsiveBoard rows={BOARD_ROWS} cols={BOARD_COLS} cardSize={cardSize}>
+        {cards}
+      </ResponsiveBoard>
+    </GameLayout>
   );
 }
 
