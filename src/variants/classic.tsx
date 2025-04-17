@@ -1,5 +1,5 @@
 // משחק זיכרון קלאסי בסיסי
-import { BaseMemory, Card, Player, MemorySettings } from '../core/BaseMemory';
+import { BaseMemory, MemorySettings } from '../core/BaseMemory';
 
 export class ClassicMemory extends BaseMemory {
   settings: MemorySettings;

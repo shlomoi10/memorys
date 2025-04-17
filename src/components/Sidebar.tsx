@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Divider, Button } from '@mui/material';
+import { Box, Typography, Divider } from '@mui/material';
 import SettingsButton from './SettingsButton';
 
 interface SidebarProps {

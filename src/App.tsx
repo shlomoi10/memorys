@@ -4,10 +4,6 @@ import Board from './components/Board';
 import PlayerSettingsDialog from './components/PlayerSettingsDialog';
 import WinnerDialog from './components/WinnerDialog';
 import { ClassicMemory } from './variants/classic';
-import { MinScoreMemory } from './variants/minscore';
-import { TripletMemory } from './variants/triplet';
-import { CategoriesMemory } from './variants/categories';
-import { ActionCardsMemory } from './variants/actioncards';
 import { MemorySettings, Player } from './core/BaseMemory';
 
 const defaultPlayers: Player[] = [
@@ -30,10 +26,6 @@ function App() {
   const handleSettingsChange = (players: Player[]) => {
     setSettings(s => ({ ...s, players, cardBackColors: players.map(p => p.color) }));
     setShowSettings(false);
-  };
-
-  const handleWin = (winnerName: string) => {
-    setWinner(winnerName);
   };
 
   return (
