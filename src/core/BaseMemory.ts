@@ -3,7 +3,7 @@ export interface Card {
   id: string;
   emoji: string;
   type: 'normal' | 'action';
-  actionType?: 'reveal-pair' | 'shuffle';
+  actionType?: 'reveal-pair' | 'shuffle' | 'extra-turn' | 'lose-turn';
   category?: string;
   isOpen: boolean;
   isMatched: boolean;
@@ -19,6 +19,11 @@ export interface MemorySettings {
   players: Player[];
   currentPlayer: number;
   cardBackColors: string[];
+  categories?: string[];
+  numPairs?: number;
+  numTriplets?: number;
+  timerEnabled?: boolean;
+  boardSize?: number;
 }
 
 export interface MemoryState {
@@ -28,6 +33,8 @@ export interface MemoryState {
   isPopupOpen: boolean;
   popupContent?: React.ReactNode;
   winner?: Player;
+  timer?: number;
+  stats?: any;
 }
 
 export abstract class BaseMemory {
