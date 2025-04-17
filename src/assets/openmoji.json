@@ -1,0 +1,18 @@
+[
+  { "emoji": "😀", "annotation": "grinning face" },
+  { "emoji": "🐶", "annotation": "dog face" },
+  { "emoji": "🌳", "annotation": "tree" },
+  { "emoji": "🚗", "annotation": "car" },
+  { "emoji": "🍎", "annotation": "red apple" },
+  { "emoji": "⚽", "annotation": "soccer ball" },
+  { "emoji": "🎩", "annotation": "top hat" },
+  { "emoji": "🦁", "annotation": "lion face" },
+  { "emoji": "🐱", "annotation": "cat face" },
+  { "emoji": "🚀", "annotation": "rocket" },
+  { "emoji": "🦉", "annotation": "owl" },
+  { "emoji": "🍕", "annotation": "pizza" },
+  { "emoji": "🎸", "annotation": "guitar" },
+  { "emoji": "🦄", "annotation": "unicorn face" },
+  { "emoji": "🎲", "annotation": "game die" },
+  { "emoji": "🧩", "annotation": "puzzle piece" }
+]
