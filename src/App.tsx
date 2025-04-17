@@ -7,10 +7,10 @@ const BOARD_ROWS = 4;
 const BOARD_COLS = 4;
 const DEFAULT_CARD_SIZE = 120;
 
-function App() {
+export default function App() {
   const [cardSize, setCardSize] = useState(DEFAULT_CARD_SIZE);
-  const [currentPlayer, setCurrentPlayer] = useState('שחקן 1');
-  const [timer, setTimer] = useState('00:00');
+  const [currentPlayer] = useState('שחקן 1');
+  const [timer] = useState('00:00');
 
   // דמו: קלפים ריקים
   const cards = Array.from({ length: BOARD_ROWS * BOARD_COLS }, (_, i) => (
@@ -52,5 +52,3 @@ function App() {
     </GameLayout>
   );
 }
-
-export default App;
