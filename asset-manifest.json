@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/memory-cards/static/js/main.17d563ec.js",
+    "static/js/453.3a6b9913.chunk.js": "/memory-cards/static/js/453.3a6b9913.chunk.js",
+    "index.html": "/memory-cards/index.html",
+    "main.17d563ec.js.map": "/memory-cards/static/js/main.17d563ec.js.map",
+    "453.3a6b9913.chunk.js.map": "/memory-cards/static/js/453.3a6b9913.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.17d563ec.js"
+  ]
+}
