@@ -13,6 +13,7 @@ import { useCategoriesMemory } from './hooks/useCategoriesMemory';
 import { useActionCardsMemory } from './hooks/useActionCardsMemory';
 import { GAME_RULES } from './constants/gameRules';
 import { MemorySettings, Player } from './core/BaseMemory';
+import './AppButtons.css';
 
 const defaultPlayers: Player[] = [
   { name: 'שחקן 1', color: '#2196f3', score: 0 },
@@ -124,11 +125,11 @@ export default function App() {
           onCardClick={onCardClick}
           currentPlayerColor={settings.cardBackColors[currentPlayer]}
         />
-        <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
-          <button onClick={reset} style={{ fontSize: 16, padding: '0.5em 1.2em', borderRadius: 8, border: '1px solid #1976d2', background: '#e3f2fd', color: '#1976d2', cursor: 'pointer' }}>התחל מחדש</button>
-          <button onClick={() => setShowSettings(true)} style={{ fontSize: 16, padding: '0.5em 1.2em', borderRadius: 8, border: '1px solid #1976d2', background: '#fff', color: '#1976d2', cursor: 'pointer' }}>הגדרות שחקנים</button>
-          <button onClick={() => setShowInfo(true)} style={{ fontSize: 16, padding: '0.5em 1.2em', borderRadius: 8, border: '1px solid #1976d2', background: '#fff', color: '#1976d2', cursor: 'pointer' }}>מידע וחוקים</button>
-          <button onClick={() => setSelectedGame(null)} style={{ fontSize: 16, padding: '0.5em 1.2em', borderRadius: 8, border: '1px solid #1976d2', background: '#fff', color: '#1976d2', cursor: 'pointer' }}>חזרה לדף הבית</button>
+        <div className="game-buttons-bar">
+          <button className="game-btn primary" onClick={reset}>התחל מחדש</button>
+          <button className="game-btn" onClick={() => setShowSettings(true)}>הגדרות שחקנים</button>
+          <button className="game-btn" onClick={() => setShowInfo(true)}>מידע וחוקים</button>
+          <button className="game-btn" onClick={() => setSelectedGame(null)}>חזרה לדף הבית</button>
         </div>
         <WinnerDialog
           open={isPopupOpen}
