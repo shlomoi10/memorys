@@ -86,7 +86,7 @@ export default function App() {
   }
 
   if (selectedGame && gameHookResult) {
-    const { cards, players, currentPlayer, onCardClick, winner, isPopupOpen, reset } = gameHookResult;
+    const { cards, players, currentPlayer, onCardClick, winner, isPopupOpen, reset, timer, pairsFound, totalPairs, moves } = gameHookResult;
     return (
       <GameLayout
         sidePanel={
@@ -95,6 +95,10 @@ export default function App() {
             currentPlayer={currentPlayer}
             gameName={gameName}
             rules={gameRules}
+            timer={timer}
+            pairsFound={pairsFound}
+            totalPairs={totalPairs}
+            moves={moves}
           />
         }
       >

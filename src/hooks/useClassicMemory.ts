@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, Player, MemorySettings, MemoryState } from '../core/BaseMemory';
+import { Card, Player, MemorySettings } from '../core/BaseMemory';
 import { getAvailableEmojis } from '../utils/EmojiHelper';
 
 export function useClassicMemory(settings: MemorySettings) {
@@ -10,6 +10,9 @@ export function useClassicMemory(settings: MemorySettings) {
   const [currentPlayer, setCurrentPlayer] = useState(settings.currentPlayer);
   const [winner, setWinner] = useState<Player | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [moves, setMoves] = useState(0);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [timer, setTimer] = useState('00:00');
 
   useEffect(() => {
     // יצירת קלפים חדשים בכל שינוי הגדרות
@@ -34,6 +37,36 @@ export function useClassicMemory(settings: MemorySettings) {
   }, [settings]);
 
   useEffect(() => {
+    if (cards.length && startTime === null && moves === 0) {
+      setStartTime(Date.now());
+    }
+  }, [cards, startTime, moves]);
+
+  useEffect(() => {
+    if (startTime !== null) {
+      const interval = setInterval(() => {
+        const diff = Math.floor((Date.now() - startTime) / 1000);
+        const m = String(Math.floor(diff / 60)).padStart(2, '0');
+        const s = String(diff % 60).padStart(2, '0');
+        setTimer(`${m}:${s}`);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [startTime]);
+
+  useEffect(() => {
+    if (flipped.length === 2) {
+      setMoves(m => m + 1);
+    }
+  }, [flipped]);
+
+  useEffect(() => {
+    setMoves(0);
+    setStartTime(null);
+    setTimer('00:00');
+  }, [settings]);
+
+  useEffect(() => {
     if (flipped.length === 2) {
       setLockBoard(true);
       setTimeout(() => {
@@ -55,7 +88,7 @@ export function useClassicMemory(settings: MemorySettings) {
         setLockBoard(false);
       }, 800);
     }
-  }, [flipped]);
+  }, [flipped, cards, currentPlayer, players.length]);
 
   useEffect(() => {
     // בדיקת ניצחון
@@ -64,7 +97,7 @@ export function useClassicMemory(settings: MemorySettings) {
       const maxScore = Math.max(...players.map(p => p.score));
       setWinner(players.find(p => p.score === maxScore) || null);
     }
-  }, [cards]);
+  }, [cards, players]);
 
   const onCardClick = (id: string) => {
     if (lockBoard) return;
@@ -95,6 +128,9 @@ export function useClassicMemory(settings: MemorySettings) {
     setIsPopupOpen(false);
   };
 
+  const pairsFound = cards.filter(c => c.isMatched).length / 2;
+  const totalPairs = cards.length / 2;
+
   return {
     cards,
     players,
@@ -103,5 +139,9 @@ export function useClassicMemory(settings: MemorySettings) {
     winner,
     isPopupOpen,
     reset,
+    timer,
+    moves,
+    pairsFound,
+    totalPairs,
   };
 }
