@@ -65,7 +65,20 @@ export default function App() {
   }
 
   const handleSettingsChange = (players: Player[]) => {
-    setSettings(s => ({ ...s, players, cardBackColors: players.map(p => p.color) }));
+    // עדכן רק את שמות/צבעי השחקנים במשחק הפעיל, בלי איפוס/ריסט
+    setSettings(s => {
+      // שמור על currentPlayer וכל שאר ההגדרות
+      const updatedPlayers = s.players.map((p, idx) => ({
+        ...p,
+        name: players[idx]?.name || p.name,
+        color: players[idx]?.color || p.color,
+      }));
+      return {
+        ...s,
+        players: updatedPlayers,
+        cardBackColors: updatedPlayers.map(p => p.color),
+      };
+    });
     setShowSettings(false);
   };
 

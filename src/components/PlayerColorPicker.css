@@ -1,0 +1,43 @@
+.player-color-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.player-color-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px #1976d233;
+  cursor: pointer;
+  outline: none;
+  transition: box-shadow 0.2s, border 0.2s, transform 0.13s;
+  box-sizing: border-box;
+}
+.player-color-circle.selected {
+  border: 3px solid #1976d2;
+  box-shadow: 0 0 0 3px #90caf9;
+  transform: scale(1.08);
+}
+
+.player-color-palette {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: 42px;
+  right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px #1976d244;
+  padding: 10px 14px;
+  z-index: 10;
+  border: 1.5px solid #e3f2fd;
+  animation: fadeInColorPalette 0.16s;
+}
+
+@keyframes fadeInColorPalette {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
