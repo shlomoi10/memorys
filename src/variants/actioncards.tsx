@@ -1,5 +1,5 @@
 // משחק עם קלפי פעולה
-import { BaseMemory, MemorySettings, Player, MemoryState, Card as CoreCard } from '../core/BaseMemory';
+import { BaseMemory, MemorySettings, Player, MemoryState, Card as CoreCard, EmojiItem } from '../core/BaseMemory';
 import { getAvailableEmojis } from '../utils/EmojiHelper';
 
 const ACTION_TYPES = ['reveal-pair', 'shuffle', 'extra-turn', 'lose-turn'] as const;
@@ -25,7 +25,7 @@ export class ActionCardsMemory extends BaseMemory {
   }
   generateCards(): CoreCard[] {
     const numPairs = this.settings.numPairs || 8;
-    const emojis = getAvailableEmojis(numPairs - 2);
+    const emojis: EmojiItem[] = getAvailableEmojis(numPairs - 2);
     let cards: CoreCard[] = [];
     emojis.forEach((emoji, i) => {
       cards.push({ id: `${i}-a`, emoji, type: 'normal', isOpen: false, isMatched: false });
@@ -34,8 +34,8 @@ export class ActionCardsMemory extends BaseMemory {
     // מוסיפים 2 זוגות קלפי פעולה
     for (let i = 0; i < 2; i++) {
       const action = getRandomAction();
-      cards.push({ id: `action${i}-a`, emoji: '⭐', type: 'action', actionType: action, isOpen: false, isMatched: false });
-      cards.push({ id: `action${i}-b`, emoji: '⭐', type: 'action', actionType: action, isOpen: false, isMatched: false });
+      cards.push({ id: `action${i}-a`, emoji: { shortName: 'star', name: 'כוכב', src: 'https://cdn.jsdelivr.net/npm/openmoji@14.0.0/color/svg/2B50.svg' }, type: 'action', actionType: action, isOpen: false, isMatched: false });
+      cards.push({ id: `action${i}-b`, emoji: { shortName: 'star', name: 'כוכב', src: 'https://cdn.jsdelivr.net/npm/openmoji@14.0.0/color/svg/2B50.svg' }, type: 'action', actionType: action, isOpen: false, isMatched: false });
     }
     for (let i = cards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -77,7 +77,7 @@ export class ActionCardsMemory extends BaseMemory {
       c1.isMatched = true;
       c2.isMatched = true;
       this.applyAction(c1.actionType!);
-    } else if (c1.emoji === c2.emoji && c1.type === 'normal' && c2.type === 'normal') {
+    } else if (c1.emoji.shortName === c2.emoji.shortName && c1.type === 'normal' && c2.type === 'normal') {
       c1.isMatched = true;
       c2.isMatched = true;
       this.settings.players[this.settings.currentPlayer].score += 1;

@@ -1,7 +1,13 @@
 // בסיס לוגיקת משחק זיכרון, ניתן להרחבה לכל וריאנט
+export interface EmojiItem {
+  shortName: string;
+  name: string;
+  src: string;
+}
+
 export interface Card {
   id: string;
-  emoji: string;
+  emoji: EmojiItem; // היה string, כעת אובייקט
   type: 'normal' | 'action';
   actionType?: 'reveal-pair' | 'shuffle' | 'extra-turn' | 'lose-turn';
   category?: string;

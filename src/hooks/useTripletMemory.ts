@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, Player, MemorySettings } from '../core/BaseMemory';
+import { Card, Player, MemorySettings, EmojiItem } from '../core/BaseMemory';
 import { getAvailableEmojis } from '../utils/EmojiHelper';
 
 export function useTripletMemory(settings: MemorySettings) {
@@ -15,10 +15,10 @@ export function useTripletMemory(settings: MemorySettings) {
     const numTriplets = settings.numTriplets || 6;
     const emojis = getAvailableEmojis(numTriplets);
     let newCards: Card[] = [];
-    emojis.forEach((emoji, i) => {
-      newCards.push({ id: `${i}-a`, emoji, type: 'normal', isOpen: false, isMatched: false });
-      newCards.push({ id: `${i}-b`, emoji, type: 'normal', isOpen: false, isMatched: false });
-      newCards.push({ id: `${i}-c`, emoji, type: 'normal', isOpen: false, isMatched: false });
+    emojis.forEach((emoji: EmojiItem, i) => {
+      newCards.push({ id: `${i}-a`, emoji: { ...emoji }, type: 'normal', isOpen: false, isMatched: false });
+      newCards.push({ id: `${i}-b`, emoji: { ...emoji }, type: 'normal', isOpen: false, isMatched: false });
+      newCards.push({ id: `${i}-c`, emoji: { ...emoji }, type: 'normal', isOpen: false, isMatched: false });
     });
     for (let i = newCards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -41,7 +41,7 @@ export function useTripletMemory(settings: MemorySettings) {
         const c1 = cards.find(c => c.id === id1);
         const c2 = cards.find(c => c.id === id2);
         const c3 = cards.find(c => c.id === id3);
-        if (c1 && c2 && c3 && c1.emoji === c2.emoji && c2.emoji === c3.emoji) {
+        if (c1 && c2 && c3 && JSON.stringify(c1.emoji) === JSON.stringify(c2.emoji) && JSON.stringify(c2.emoji) === JSON.stringify(c3.emoji)) {
           setCards(prev => prev.map(card =>
             card.id === id1 || card.id === id2 || card.id === id3 ? { ...card, isMatched: true, isOpen: true } : card
           ));
@@ -78,10 +78,10 @@ export function useTripletMemory(settings: MemorySettings) {
     const numTriplets = settings.numTriplets || 6;
     const emojis = getAvailableEmojis(numTriplets);
     let newCards: Card[] = [];
-    emojis.forEach((emoji, i) => {
-      newCards.push({ id: `${i}-a`, emoji, type: 'normal', isOpen: false, isMatched: false });
-      newCards.push({ id: `${i}-b`, emoji, type: 'normal', isOpen: false, isMatched: false });
-      newCards.push({ id: `${i}-c`, emoji, type: 'normal', isOpen: false, isMatched: false });
+    emojis.forEach((emoji: EmojiItem, i) => {
+      newCards.push({ id: `${i}-a`, emoji: { ...emoji }, type: 'normal', isOpen: false, isMatched: false });
+      newCards.push({ id: `${i}-b`, emoji: { ...emoji }, type: 'normal', isOpen: false, isMatched: false });
+      newCards.push({ id: `${i}-c`, emoji: { ...emoji }, type: 'normal', isOpen: false, isMatched: false });
     });
     for (let i = newCards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

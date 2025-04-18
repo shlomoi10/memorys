@@ -1,14 +1,14 @@
 // משחק "קטגוריות"
-import { BaseMemory, MemorySettings, Player, MemoryState, Card as CoreCard } from '../core/BaseMemory';
+import { BaseMemory, MemorySettings, Player, MemoryState, Card as CoreCard, EmojiItem } from '../core/BaseMemory';
 import { getAvailableEmojis } from '../utils/EmojiHelper';
 
 const CATEGORY_LIST = ['חיות', 'פירות', 'ספורט'] as const;
 type Category = typeof CATEGORY_LIST[number];
 
-function getCategory(emoji: string): Category {
-  // דמו: קביעה לפי emoji
-  if ('🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🦁🐮🐸🐵🐔'.includes(emoji)) return 'חיות';
-  if ('🍎🍌🍇🍉🍓🍒🍑🍍🥭🍅🥑🥦🥕🌽'.includes(emoji)) return 'פירות';
+function getCategory(emoji: EmojiItem): Category {
+  // דמו: קביעה לפי shortName
+  if ('dog cat mouse hamster rabbit fox bear panda koala tiger lion cow frog monkey chicken'.split(' ').includes(emoji.shortName)) return 'חיות';
+  if ('apple banana grapes watermelon strawberry cherry peach pineapple mango tomato avocado broccoli carrot corn'.split(' ').includes(emoji.shortName)) return 'פירות';
   return 'ספורט';
 }
 
@@ -28,7 +28,7 @@ export class CategoriesMemory extends BaseMemory {
   }
   generateCards(): CoreCard[] {
     const numPairs = this.settings.numPairs || 8;
-    const emojis = getAvailableEmojis(numPairs);
+    const emojis: EmojiItem[] = getAvailableEmojis(numPairs);
     let cards: CoreCard[] = [];
     emojis.forEach((emoji, i) => {
       const category = getCategory(emoji);

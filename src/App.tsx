@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import GameLayout from './components/GameLayout';
-import ModernBoard from './components/ModernBoard';
+import Board from './components/Board';
 import SidePanel from './components/SidePanel';
 import GameInfoDialog from './components/GameInfoDialog';
 import PlayerSettingsDialog from './components/PlayerSettingsDialog';
@@ -102,7 +102,7 @@ export default function App() {
           />
         }
       >
-        <ModernBoard
+        <Board
           cards={cards}
           onCardClick={onCardClick}
           currentPlayerColor={settings.cardBackColors[currentPlayer]}

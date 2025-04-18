@@ -1,5 +1,5 @@
 // משחק "מינימום ניקוד"
-import { BaseMemory, MemorySettings, Player, MemoryState, Card as CoreCard } from '../core/BaseMemory';
+import { BaseMemory, MemorySettings, Player, MemoryState, Card as CoreCard, EmojiItem } from '../core/BaseMemory';
 import { getAvailableEmojis } from '../utils/EmojiHelper';
 
 export class MinScoreMemory extends BaseMemory {
@@ -18,7 +18,7 @@ export class MinScoreMemory extends BaseMemory {
   }
   generateCards(): CoreCard[] {
     const numPairs = this.settings.numPairs || 8;
-    const emojis = getAvailableEmojis(numPairs);
+    const emojis: EmojiItem[] = getAvailableEmojis(numPairs);
     let cards: CoreCard[] = [];
     emojis.forEach((emoji, i) => {
       cards.push({ id: `${i}-a`, emoji, type: 'normal', isOpen: false, isMatched: false });

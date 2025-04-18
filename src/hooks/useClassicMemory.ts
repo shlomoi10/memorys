@@ -17,11 +17,11 @@ export function useClassicMemory(settings: MemorySettings) {
   useEffect(() => {
     // יצירת קלפים חדשים בכל שינוי הגדרות
     const numPairs = settings.numPairs || 8;
-    const emojis = getAvailableEmojis(numPairs);
+    const emojis = getAvailableEmojis(numPairs); // [{shortName, src}]
     let newCards: Card[] = [];
-    emojis.forEach((emoji, i) => {
-      newCards.push({ id: `${i}-a`, emoji, type: 'normal', isOpen: false, isMatched: false });
-      newCards.push({ id: `${i}-b`, emoji, type: 'normal', isOpen: false, isMatched: false });
+    emojis.forEach((emojiObj, i) => {
+      newCards.push({ id: `${i}-a`, emoji: emojiObj, type: 'normal', isOpen: false, isMatched: false });
+      newCards.push({ id: `${i}-b`, emoji: emojiObj, type: 'normal', isOpen: false, isMatched: false });
     });
     for (let i = newCards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -73,7 +73,7 @@ export function useClassicMemory(settings: MemorySettings) {
         const [id1, id2] = flipped;
         const c1 = cards.find(c => c.id === id1);
         const c2 = cards.find(c => c.id === id2);
-        if (c1 && c2 && c1.emoji === c2.emoji) {
+        if (c1 && c2 && JSON.stringify(c1.emoji) === JSON.stringify(c2.emoji)) {
           setCards(prev => prev.map(card =>
             card.id === id1 || card.id === id2 ? { ...card, isMatched: true, isOpen: true } : card
           ));
@@ -109,11 +109,11 @@ export function useClassicMemory(settings: MemorySettings) {
 
   const reset = () => {
     const numPairs = settings.numPairs || 8;
-    const emojis = getAvailableEmojis(numPairs);
+    const emojis = getAvailableEmojis(numPairs); // [{shortName, src}]
     let newCards: Card[] = [];
-    emojis.forEach((emoji, i) => {
-      newCards.push({ id: `${i}-a`, emoji, type: 'normal', isOpen: false, isMatched: false });
-      newCards.push({ id: `${i}-b`, emoji, type: 'normal', isOpen: false, isMatched: false });
+    emojis.forEach((emojiObj, i) => {
+      newCards.push({ id: `${i}-a`, emoji: emojiObj, type: 'normal', isOpen: false, isMatched: false });
+      newCards.push({ id: `${i}-b`, emoji: emojiObj, type: 'normal', isOpen: false, isMatched: false });
     });
     for (let i = newCards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

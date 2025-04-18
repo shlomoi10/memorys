@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Card, Player, MemorySettings } from '../core/BaseMemory';
+import { Card, Player, MemorySettings, EmojiItem } from '../core/BaseMemory';
 import { getAvailableEmojis } from '../utils/EmojiHelper';
 
 const CATEGORY_LIST = ['חיות', 'פירות', 'ספורט'] as const;
 type Category = typeof CATEGORY_LIST[number];
 
-function getCategory(emoji: string): Category {
-  if ('🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🦁🐮🐸🐵🐔'.includes(emoji)) return 'חיות';
-  if ('🍎🍌🍇🍉🍓🍒🍑🍍🥭🍅🥑🥦🥕🌽'.includes(emoji)) return 'פירות';
+function getCategory(emoji: EmojiItem): Category {
+  if ('🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🦁🐮🐸🐵🐔'.includes(emoji.shortName)) return 'חיות';
+  if ('🍎🍌🍇🍉🍓🍒🍑🍍🥭🍅🥑🥦🥕🌽'.includes(emoji.shortName)) return 'פירות';
   return 'ספורט';
 }
 

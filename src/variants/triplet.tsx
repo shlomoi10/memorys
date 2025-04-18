@@ -1,5 +1,5 @@
 // משחק "השלישייה" (רק אם נמצא שלישי מקבלים נקודה)
-import { BaseMemory, MemorySettings, Player, MemoryState, Card as CoreCard } from '../core/BaseMemory';
+import { BaseMemory, MemorySettings, Player, MemoryState, Card as CoreCard, EmojiItem } from '../core/BaseMemory';
 import { getAvailableEmojis } from '../utils/EmojiHelper';
 
 export class TripletMemory extends BaseMemory {
@@ -18,7 +18,7 @@ export class TripletMemory extends BaseMemory {
   }
   generateCards(): CoreCard[] {
     const numTriplets = this.settings.numTriplets || 6;
-    const emojis = getAvailableEmojis(numTriplets);
+    const emojis: EmojiItem[] = getAvailableEmojis(numTriplets);
     let cards: CoreCard[] = [];
     emojis.forEach((emoji, i) => {
       cards.push({ id: `${i}-a`, emoji, type: 'normal', isOpen: false, isMatched: false });

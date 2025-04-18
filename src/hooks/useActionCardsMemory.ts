@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, Player, MemorySettings } from '../core/BaseMemory';
+import { Card, Player, MemorySettings, EmojiItem } from '../core/BaseMemory';
 import { getAvailableEmojis } from '../utils/EmojiHelper';
 
 const ACTION_TYPES = ['reveal-pair', 'shuffle', 'extra-turn', 'lose-turn'] as const;
@@ -20,7 +20,7 @@ export function useActionCardsMemory(settings: MemorySettings) {
 
   useEffect(() => {
     const numPairs = settings.numPairs || 8;
-    const emojis = getAvailableEmojis(numPairs - 2);
+    const emojis: EmojiItem[] = getAvailableEmojis(numPairs - 2);
     let newCards: Card[] = [];
     emojis.forEach((emoji, i) => {
       newCards.push({ id: `${i}-a`, emoji, type: 'normal', isOpen: false, isMatched: false });
@@ -28,8 +28,8 @@ export function useActionCardsMemory(settings: MemorySettings) {
     });
     for (let i = 0; i < 2; i++) {
       const action = getRandomAction();
-      newCards.push({ id: `action${i}-a`, emoji: '⭐', type: 'action', actionType: action, isOpen: false, isMatched: false });
-      newCards.push({ id: `action${i}-b`, emoji: '⭐', type: 'action', actionType: action, isOpen: false, isMatched: false });
+      newCards.push({ id: `action${i}-a`, emoji: { shortName: 'star', name: 'כוכב', src: 'https://cdn.jsdelivr.net/npm/openmoji@14.0.0/color/svg/2B50.svg' }, type: 'action', actionType: action, isOpen: false, isMatched: false });
+      newCards.push({ id: `action${i}-b`, emoji: { shortName: 'star', name: 'כוכב', src: 'https://cdn.jsdelivr.net/npm/openmoji@14.0.0/color/svg/2B50.svg' }, type: 'action', actionType: action, isOpen: false, isMatched: false });
     }
     for (let i = newCards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -56,7 +56,7 @@ export function useActionCardsMemory(settings: MemorySettings) {
             card.id === id1 || card.id === id2 ? { ...card, isMatched: true, isOpen: true } : card
           ));
           applyAction(c1.actionType!);
-        } else if (c1 && c2 && c1.emoji === c2.emoji && c1.type === 'normal' && c2.type === 'normal') {
+        } else if (c1 && c2 && c1.emoji.shortName === c2.emoji.shortName && c1.type === 'normal' && c2.type === 'normal') {
           setCards(prev => prev.map(card =>
             card.id === id1 || card.id === id2 ? { ...card, isMatched: true, isOpen: true } : card
           ));
@@ -124,7 +124,7 @@ export function useActionCardsMemory(settings: MemorySettings) {
 
   const reset = () => {
     const numPairs = settings.numPairs || 8;
-    const emojis = getAvailableEmojis(numPairs - 2);
+    const emojis: EmojiItem[] = getAvailableEmojis(numPairs - 2);
     let newCards: Card[] = [];
     emojis.forEach((emoji, i) => {
       newCards.push({ id: `${i}-a`, emoji, type: 'normal', isOpen: false, isMatched: false });
@@ -132,8 +132,8 @@ export function useActionCardsMemory(settings: MemorySettings) {
     });
     for (let i = 0; i < 2; i++) {
       const action = getRandomAction();
-      newCards.push({ id: `action${i}-a`, emoji: '⭐', type: 'action', actionType: action, isOpen: false, isMatched: false });
-      newCards.push({ id: `action${i}-b`, emoji: '⭐', type: 'action', actionType: action, isOpen: false, isMatched: false });
+      newCards.push({ id: `action${i}-a`, emoji: { shortName: 'star', name: 'כוכב', src: 'https://cdn.jsdelivr.net/npm/openmoji@14.0.0/color/svg/2B50.svg' }, type: 'action', actionType: action, isOpen: false, isMatched: false });
+      newCards.push({ id: `action${i}-b`, emoji: { shortName: 'star', name: 'כוכב', src: 'https://cdn.jsdelivr.net/npm/openmoji@14.0.0/color/svg/2B50.svg' }, type: 'action', actionType: action, isOpen: false, isMatched: false });
     }
     for (let i = newCards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
