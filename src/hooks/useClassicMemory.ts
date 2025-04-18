@@ -43,7 +43,7 @@ export function useClassicMemory(settings: MemorySettings) {
   }, [cards, startTime, moves]);
 
   useEffect(() => {
-    if (startTime !== null) {
+    if (startTime !== null && !winner) {
       const interval = setInterval(() => {
         const diff = Math.floor((Date.now() - startTime) / 1000);
         const m = String(Math.floor(diff / 60)).padStart(2, '0');
@@ -52,7 +52,7 @@ export function useClassicMemory(settings: MemorySettings) {
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [startTime]);
+  }, [startTime, winner]);
 
   useEffect(() => {
     if (flipped.length === 2) {
@@ -99,8 +99,14 @@ export function useClassicMemory(settings: MemorySettings) {
     }
   }, [cards, players]);
 
+  useEffect(() => {
+    if (winner) {
+      setStartTime(null); // עוצר את הטיימר
+    }
+  }, [winner]);
+
   const onCardClick = (id: string) => {
-    if (lockBoard) return;
+    if (lockBoard || winner) return;
     const card = cards.find(c => c.id === id);
     if (!card || card.isOpen || card.isMatched || flipped.includes(id)) return;
     setCards(prev => prev.map(c => c.id === id ? { ...c, isOpen: true } : c));

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GameLayout from './components/GameLayout';
 import Board from './components/Board';
 import SidePanel from './components/SidePanel';
@@ -36,6 +36,7 @@ export default function App() {
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [winnerDialogClosed, setWinnerDialogClosed] = useState(false);
 
   const classic = useClassicMemory(settings);
   const minscore = useMinScoreMemory(settings);
@@ -66,6 +67,22 @@ export default function App() {
     setSettings(s => ({ ...s, players, cardBackColors: players.map(p => p.color) }));
     setShowSettings(false);
   };
+
+  const handleWinnerDialogClose = () => {
+    setWinnerDialogClosed(true);
+    // הפעל משחק חדש על ידי שינוי settings (טריגר לאיפוס)
+    setSettings(prev => ({
+      ...prev,
+      // שינוי קטן כדי לטרגר את useEffect של useClassicMemory
+      players: prev.players.map(p => ({ ...p })),
+    }));
+  };
+
+  useEffect(() => {
+    if (winnerDialogClosed) {
+      setWinnerDialogClosed(false);
+    }
+  }, [settings]);
 
   if (!selectedGame) {
     return (
@@ -113,23 +130,18 @@ export default function App() {
           <button onClick={() => setShowInfo(true)} style={{ fontSize: 16, padding: '0.5em 1.2em', borderRadius: 8, border: '1px solid #1976d2', background: '#fff', color: '#1976d2', cursor: 'pointer' }}>מידע וחוקים</button>
           <button onClick={() => setSelectedGame(null)} style={{ fontSize: 16, padding: '0.5em 1.2em', borderRadius: 8, border: '1px solid #1976d2', background: '#fff', color: '#1976d2', cursor: 'pointer' }}>חזרה לדף הבית</button>
         </div>
+        <WinnerDialog
+          open={isPopupOpen}
+          winner={winner ? winner.name : ''}
+          onClose={handleWinnerDialogClose}
+        />
         <PlayerSettingsDialog
           open={showSettings}
           players={players}
           onChange={handleSettingsChange}
           onClose={() => setShowSettings(false)}
         />
-        <WinnerDialog
-          open={!!isPopupOpen}
-          winner={winner ? winner.name : ''}
-          onClose={reset}
-        />
-        <GameInfoDialog
-          open={showInfo}
-          onClose={() => setShowInfo(false)}
-          gameName={gameName}
-          rules={gameRules}
-        />
+        <GameInfoDialog open={showInfo} onClose={() => setShowInfo(false)} gameName={gameName} rules={gameRules} />
       </GameLayout>
     );
   }
