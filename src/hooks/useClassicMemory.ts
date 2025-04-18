@@ -144,6 +144,9 @@ export function useClassicMemory(settings: MemorySettings) {
     setCurrentPlayer(settings.currentPlayer);
     setWinner(null);
     setIsPopupOpen(false);
+    setMoves(0);
+    setStartTime(null);
+    setTimer('00:00');
   };
 
   const pairsFound = cards.filter(c => c.isMatched).length / 2;
