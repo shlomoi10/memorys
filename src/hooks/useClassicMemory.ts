@@ -15,7 +15,19 @@ export function useClassicMemory(settings: MemorySettings) {
   const [timer, setTimer] = useState('00:00');
 
   useEffect(() => {
-    // יצירת קלפים חדשים בכל שינוי הגדרות
+    // אפדייט לשמות/צבעים בלבד (לא לאפס משחק)
+    setPlayers(prevPlayers => prevPlayers.map((p, idx) => ({
+      ...p,
+      name: settings.players[idx]?.name || p.name,
+      color: settings.players[idx]?.color || p.color,
+    })));
+    // עדכן צבעי גב קלפים אם צריך (אם יש סטייט נפרד)
+    // setCardBackColors && setCardBackColors(settings.players.map(p => p.color));
+    // אל תאפס לוח, תור, ניקוד וכו'
+  }, [settings.players]);
+
+  useEffect(() => {
+    // יצירת קלפים חדשים בכל שינוי הגדרות (מלבד שינוי שם/צבע)
     const numPairs = settings.numPairs || 8;
     const emojis = getAvailableEmojis(numPairs); // [{shortName, src}]
     let newCards: Card[] = [];
@@ -34,7 +46,13 @@ export function useClassicMemory(settings: MemorySettings) {
     setCurrentPlayer(settings.currentPlayer);
     setWinner(null);
     setIsPopupOpen(false);
-  }, [settings]);
+  }, [settings.numPairs, settings.currentPlayer]);
+
+  useEffect(() => {
+    setMoves(0);
+    setStartTime(null);
+    setTimer('00:00');
+  }, [settings.numPairs, settings.currentPlayer]);
 
   useEffect(() => {
     if (cards.length && startTime === null && moves === 0) {
@@ -59,12 +77,6 @@ export function useClassicMemory(settings: MemorySettings) {
       setMoves(m => m + 1);
     }
   }, [flipped]);
-
-  useEffect(() => {
-    setMoves(0);
-    setStartTime(null);
-    setTimer('00:00');
-  }, [settings]);
 
   useEffect(() => {
     if (flipped.length === 2) {

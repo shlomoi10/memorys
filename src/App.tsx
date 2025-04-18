@@ -140,9 +140,11 @@ export default function App() {
         />
         <div className="game-buttons-bar">
           <button className="game-btn primary" onClick={reset}>התחל מחדש</button>
-          <button className="game-btn" onClick={() => setShowSettings(true)}>הגדרות שחקנים</button>
-          <button className="game-btn" onClick={() => setShowInfo(true)}>מידע וחוקים</button>
-          <button className="game-btn" onClick={() => setSelectedGame(null)}>חזרה לדף הבית</button>
+          <button className="game-btn" onClick={() => setShowSettings(true)} type="button">הגדרות שחקנים</button>
+          <button className="game-btn" onClick={() => setShowInfo(true)} type="button">מידע וחוקים</button>
+          <button className="game-btn" onClick={() => {
+            window.location.reload();
+          }} type="button">חזרה לדף הבית</button>
         </div>
         <WinnerDialog
           open={isPopupOpen}

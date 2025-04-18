@@ -189,7 +189,12 @@ export default function StartScreen({
             color="primary"
             size="large"
             fullWidth
-            onClick={() => onStart({ selectedGame, boardSize, players })}
+            onClick={() => {
+              setSelectedGame(gameVariants[0].key);
+              setBoardSize(4);
+              setPlayers(defaultPlayers.slice(0, 2));
+              onStart({ selectedGame, boardSize, players });
+            }}
             sx={{ fontWeight: 900, fontSize: 24, borderRadius: 99, py: 1.5, boxShadow: '0 2px 12px #1976d244', letterSpacing: 2, bgcolor: 'linear-gradient(90deg,#1976d2 60%,#64b5f6 100%)', mt: 2, mb: 1, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', textTransform: 'none', transition: 'all 0.2s', '&:hover': { bgcolor: '#1565c0' }, minWidth: 180 }}
           >
             התחל משחק
