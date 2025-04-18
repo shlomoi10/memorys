@@ -10,6 +10,8 @@ export function useMinScoreMemory(settings: MemorySettings) {
   const [currentPlayer, setCurrentPlayer] = useState(settings.currentPlayer);
   const [winner, setWinner] = useState<Player | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [timer, setTimer] = useState('00:00');
+  const [moves, setMoves] = useState(0);
 
   useEffect(() => {
     const numPairs = settings.numPairs || 8;
@@ -53,6 +55,7 @@ export function useMinScoreMemory(settings: MemorySettings) {
         }
         setFlipped([]);
         setLockBoard(false);
+        setMoves(m => m + 1);
       }, 800);
     }
   }, [flipped]);
@@ -64,6 +67,22 @@ export function useMinScoreMemory(settings: MemorySettings) {
       setWinner(players.find(p => p.score === minScore) || null);
     }
   }, [cards]);
+
+  useEffect(() => {
+    let interval: any = null;
+    if (cards.length > 0 && !winner) {
+      let seconds = 0;
+      interval = setInterval(() => {
+        seconds++;
+        const min = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const sec = (seconds % 60).toString().padStart(2, '0');
+        setTimer(`${min}:${sec}`);
+      }, 1000);
+    } else if (winner && interval) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [cards, winner]);
 
   const onCardClick = (id: string) => {
     if (lockBoard) return;
@@ -92,6 +111,8 @@ export function useMinScoreMemory(settings: MemorySettings) {
     setCurrentPlayer(settings.currentPlayer);
     setWinner(null);
     setIsPopupOpen(false);
+    setTimer('00:00');
+    setMoves(0);
   };
 
   return {
@@ -102,5 +123,9 @@ export function useMinScoreMemory(settings: MemorySettings) {
     winner,
     isPopupOpen,
     reset,
+    timer,
+    moves,
+    pairsFound: cards.filter(c => c.isMatched).length / 2,
+    totalPairs: cards.length / 2,
   };
 }

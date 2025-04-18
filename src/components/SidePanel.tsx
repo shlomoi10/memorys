@@ -81,10 +81,11 @@ export default function SidePanel({ players, currentPlayer, gameName, rules, tim
         ))}
       </Stack>
       <Divider sx={{ my: 2, bgcolor: '#1976d2', height: 2, borderRadius: 99, opacity: 0.12 }} />
-      <Stack direction="row" spacing={1.5} justifyContent="center" alignItems="center" sx={{ mb: 2 }}>
+      <Stack direction="row" spacing={4} justifyContent="center" alignItems="center" sx={{ mb: 2 }}>
         <Tooltip title="טיימר משחק">
           <Chip icon={<AccessTimeOutlinedIcon sx={{ color: '#1976d2' }} />} label={timer} sx={{ fontWeight: 700, fontSize: 16, px: 1.5, bgcolor: '#e3f2fd', color: '#1976d2', fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', boxShadow: '0 2px 8px #1976d244', borderRadius: 2 }} />
         </Tooltip>
+        <Box sx={{ width: 24 }} />
         <Tooltip title="מספר מהלכים">
           <Chip icon={<ReplayOutlinedIcon sx={{ color: '#1976d2' }} />} label={moves} sx={{ fontWeight: 700, fontSize: 16, px: 1.5, bgcolor: '#e3f2fd', color: '#1976d2', fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', boxShadow: '0 2px 8px #1976d244', borderRadius: 2 }} />
         </Tooltip>

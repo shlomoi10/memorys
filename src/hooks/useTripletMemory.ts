@@ -10,6 +10,8 @@ export function useTripletMemory(settings: MemorySettings) {
   const [currentPlayer, setCurrentPlayer] = useState(settings.currentPlayer);
   const [winner, setWinner] = useState<Player | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [timer, setTimer] = useState('00:00');
+  const [moves, setMoves] = useState(0);
 
   useEffect(() => {
     const numTriplets = settings.numTriplets || 6;
@@ -54,9 +56,26 @@ export function useTripletMemory(settings: MemorySettings) {
         }
         setFlipped([]);
         setLockBoard(false);
+        setMoves(m => m + 1);
       }, 900);
     }
   }, [flipped]);
+
+  useEffect(() => {
+    let interval: any = null;
+    if (cards.length > 0 && !winner) {
+      let seconds = 0;
+      interval = setInterval(() => {
+        seconds++;
+        const min = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const sec = (seconds % 60).toString().padStart(2, '0');
+        setTimer(`${min}:${sec}`);
+      }, 1000);
+    } else if (winner && interval) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [cards, winner]);
 
   useEffect(() => {
     if (cards.length > 0 && cards.every(c => c.isMatched)) {
@@ -104,5 +123,9 @@ export function useTripletMemory(settings: MemorySettings) {
     winner,
     isPopupOpen,
     reset,
+    timer,
+    moves,
+    pairsFound: Math.floor(cards.filter(c => c.isMatched).length / 3),
+    totalPairs: Math.floor(cards.length / 3),
   };
 }
