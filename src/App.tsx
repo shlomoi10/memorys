@@ -103,11 +103,16 @@ export default function App() {
         gameVariants={gameVariants}
         defaultPlayers={settings.players}
         onStart={({ selectedGame, boardSize, players }) => {
+          // קבע מספר זוגות לפי boardSize
+          let numPairs = 8;
+          if (boardSize === 6) numPairs = 18;
+          else if (boardSize === 8) numPairs = 32;
           setSettings({
             players,
             currentPlayer: 0,
             cardBackColors: players.map(p => p.color),
             boardSize,
+            numPairs,
           });
           setSelectedGame(selectedGame);
         }}
@@ -137,6 +142,7 @@ export default function App() {
           cards={cards}
           onCardClick={onCardClick}
           currentPlayerColor={players[currentPlayer]?.color}
+          boardSize={settings.boardSize}
         />
         <div style={{ display: 'flex', gap: 12, marginTop: 28, justifyContent: 'center', width: '100%' }}>
           <button className="game-btn primary" onClick={reset}>התחל מחדש</button>
