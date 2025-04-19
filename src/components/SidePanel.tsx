@@ -38,7 +38,12 @@ export default function SidePanel({ players, currentPlayer, gameName, rules, tim
         transition: 'box-shadow 0.3s',
         backdropFilter: 'blur(1.5px)',
         border: '2.5px solid #e3f0ff',
-        position: 'relative',
+        position: 'sticky',
+        top: 0,
+        alignSelf: 'flex-start',
+        zIndex: 100,
+        height: 'fit-content',
+        maxHeight: 'calc(100vh - 48px)',
         overflow: 'visible',
       }}
     >
