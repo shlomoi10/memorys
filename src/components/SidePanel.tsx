@@ -6,6 +6,8 @@ import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined';
 import GroupsIcon from '@mui/icons-material/Groups';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import EmojisDialog from './EmojisDialog';
 
 interface SidePanelProps {
   players: Player[];
@@ -16,9 +18,12 @@ interface SidePanelProps {
   pairsFound: number;
   totalPairs: number;
   moves: number;
+  cards?: import('../core/BaseMemory').Card[];
 }
 
-export default function SidePanel({ players, currentPlayer, gameName, rules, timer, pairsFound, totalPairs, moves }: SidePanelProps) {
+export default function SidePanel({ players, currentPlayer, gameName, rules, timer, pairsFound, totalPairs, moves, cards }: SidePanelProps) {
+  const [showEmojis, setShowEmojis] = React.useState(false);
+
   return (
     <Box
       sx={{
@@ -114,6 +119,19 @@ export default function SidePanel({ players, currentPlayer, gameName, rules, tim
       <Divider sx={{ my: 2, bgcolor: '#1976d2', height: 2, borderRadius: 99, opacity: 0.12 }} />
       <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 0.5, color: '#222', fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', fontSize: 18 }}>חוקי המשחק:</Typography>
       <Typography variant="body2" sx={{ whiteSpace: 'pre-line', color: '#444', fontWeight: 500, fontSize: 15, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important' }}>{rules}</Typography>
+      {/* כפתור קלפים משתתפים */}
+      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+        <button
+          className="game-btn"
+          style={{ fontWeight: 800, fontSize: 18, borderRadius: 99, padding: '10px 28px', display: 'flex', alignItems: 'center', gap: 8, background: '#e3f0ff', color: '#1976d2', border: 'none', boxShadow: '0 2px 8px #1976d244', cursor: 'pointer', transition: 'background 0.2s' }}
+          onClick={() => setShowEmojis(true)}
+        >
+          <EmojiEmotionsIcon sx={{ fontSize: 28, mr: 1 }} /> קלפים משחקים
+        </button>
+      </Box>
+      {cards && (
+        <EmojisDialog open={showEmojis} onClose={() => setShowEmojis(false)} cards={cards} />
+      )}
     </Box>
   );
 }

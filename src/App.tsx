@@ -3,9 +3,9 @@ import GameLayout from './components/GameLayout';
 import Board from './components/Board';
 import SidePanel from './components/SidePanel';
 import GameInfoDialog from './components/GameInfoDialog';
-import PlayerSettingsDialog from './components/PlayerSettingsDialog';
 import WinnerDialog from './components/WinnerDialog';
 import StartScreen from './components/StartScreen';
+import PlayerSettingsDialog from './components/PlayerSettingsDialog';
 import { useClassicMemory } from './hooks/useClassicMemory';
 import { useMinScoreMemory } from './hooks/useMinScoreMemory';
 import { useTripletMemory } from './hooks/useTripletMemory';
@@ -33,11 +33,29 @@ export default function App() {
     players: defaultPlayers,
     currentPlayer: 0,
     cardBackColors: ['#2196f3', '#4caf50'],
+    cardOrientation: 'portrait',
   });
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [winnerDialogClosed, setWinnerDialogClosed] = useState(false);
+  const [cardOrientation, setCardOrientation] = useState<'portrait' | 'landscape'>(settings.cardOrientation || 'portrait');
+
+  // הגדרות נשמרות ב-localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('memorySettings');
+    if (saved) {
+      setSettings(prev => ({ ...prev, ...JSON.parse(saved) }));
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem('memorySettings', JSON.stringify(settings));
+  }, [settings]);
+
+  // שמירה וטעינה של הגדרות כולל cardOrientation
+  useEffect(() => {
+    setCardOrientation(settings.cardOrientation || 'portrait');
+  }, [settings.cardOrientation]);
 
   // שינוי הגדרות כלליות (שמות, צבעים, שחקנים) יתעדכן אוטומטית בכל המשחקים
   // כל hook של משחק יקבל תמיד את settings המשותף
@@ -74,6 +92,12 @@ export default function App() {
       players: newPlayers,
       cardBackColors: newPlayers.map(p => p.color),
     }));
+  };
+
+  // שינוי כיוון קלפים
+  const handleCardOrientationChange = (value: 'portrait' | 'landscape') => {
+    setCardOrientation(value);
+    setSettings(prev => ({ ...prev, cardOrientation: value }));
   };
 
   const handleWinnerDialogClose = () => {
@@ -135,6 +159,7 @@ export default function App() {
             pairsFound={pairsFound}
             totalPairs={totalPairs}
             moves={moves}
+            cards={cards}
           />
         }
       >
@@ -160,6 +185,8 @@ export default function App() {
           players={players}
           onChange={handleSettingsChange}
           onClose={() => setShowSettings(false)}
+          cardOrientation={cardOrientation}
+          onCardOrientationChange={handleCardOrientationChange}
         />
         <GameInfoDialog open={showInfo} onClose={() => setShowInfo(false)} gameName={gameName} rules={gameRules} />
       </GameLayout>

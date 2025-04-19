@@ -30,6 +30,7 @@ export interface MemorySettings {
   numTriplets?: number;
   timerEnabled?: boolean;
   boardSize?: number;
+  cardOrientation?: 'portrait' | 'landscape'; // חדש: אורך/רוחב
 }
 
 export interface MemoryState {

@@ -14,7 +14,13 @@ export function useTripletMemory(settings: MemorySettings) {
   const [moves, setMoves] = useState(0);
 
   useEffect(() => {
-    const numTriplets = settings.numTriplets || 6;
+    // קבע מספר שלישיות לפי גודל הלוח (boardSize)
+    let numTriplets = settings.numTriplets;
+    if (settings.boardSize) {
+      const total = settings.boardSize * settings.boardSize;
+      numTriplets = Math.floor(total / 3);
+    }
+    numTriplets = numTriplets || 6;
     const emojis = getAvailableEmojis(numTriplets);
     let newCards: Card[] = [];
     emojis.forEach((emoji: EmojiItem, i) => {
@@ -94,7 +100,12 @@ export function useTripletMemory(settings: MemorySettings) {
   };
 
   const reset = () => {
-    const numTriplets = settings.numTriplets || 6;
+    let numTriplets = settings.numTriplets;
+    if (settings.boardSize) {
+      const total = settings.boardSize * settings.boardSize;
+      numTriplets = Math.floor(total / 3);
+    }
+    numTriplets = numTriplets || 6;
     const emojis = getAvailableEmojis(numTriplets);
     let newCards: Card[] = [];
     emojis.forEach((emoji: EmojiItem, i) => {
