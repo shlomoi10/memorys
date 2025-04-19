@@ -18,10 +18,14 @@ const colorOptions = ['#2196f3', '#4caf50', '#ff9800', '#e91e63', '#795548', '#6
 
 export default function PlayerSettingsDialog({ open, players, onChange, onClose, cardOrientation = 'portrait', onCardOrientationChange }: PlayerSettingsDialogProps) {
   const [localPlayers, setLocalPlayers] = useState(players);
+  const [localOrientation, setLocalOrientation] = useState<'portrait' | 'landscape'>(cardOrientation);
 
   useEffect(() => {
-    setLocalPlayers(players);
-  }, [players, open]);
+    if (open) {
+      setLocalPlayers(players);
+      setLocalOrientation(cardOrientation);
+    }
+  }, [players, open, cardOrientation]);
 
   const handleNameChange = (idx: number, value: string) => {
     const updated = [...localPlayers];
@@ -35,10 +39,12 @@ export default function PlayerSettingsDialog({ open, players, onChange, onClose,
   };
   const handleSave = () => {
     onChange(localPlayers);
+    if (onCardOrientationChange) {
+      onCardOrientationChange(localOrientation);
+    }
     onClose();
   };
   const handleCancel = () => {
-    setLocalPlayers(players);
     onClose();
   };
 
@@ -104,7 +110,7 @@ export default function PlayerSettingsDialog({ open, players, onChange, onClose,
           </Grid>
         </Box>
         <Box sx={{ p: 3, pt: 2 }}>
-          <CardSettingsSection orientation={cardOrientation} onChange={onCardOrientationChange || (() => {})} />
+          <CardSettingsSection orientation={localOrientation} onChange={setLocalOrientation} />
         </Box>
       </DialogContent>
       <DialogActions className="player-settings-actions" sx={{
