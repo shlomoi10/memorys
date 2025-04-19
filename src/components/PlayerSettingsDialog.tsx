@@ -41,7 +41,16 @@ export default function PlayerSettingsDialog({ open, players, onChange, onClose 
 
   return (
     <Dialog open={open} onClose={handleCancel} dir="rtl">
-      <DialogTitle className="player-settings-title">הגדרות שחקנים</DialogTitle>
+      <DialogTitle className="player-settings-title" sx={{
+        fontFamily: 'Heebo, Varela Round, Arial, sans-serif',
+        fontWeight: 900,
+        fontSize: 26,
+        color: '#1976d2',
+        textAlign: 'right',
+        letterSpacing: 1,
+        bgcolor: 'rgba(255,255,255,0.98)',
+        borderBottom: '2px solid #e3f0ff',
+      }}>הגדרות שחקנים</DialogTitle>
       <DialogContent>
         <Grid container spacing={3} className="player-settings-grid">
           {localPlayers.map((player, idx) => (

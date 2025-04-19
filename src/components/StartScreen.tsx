@@ -21,12 +21,14 @@ interface StartScreenProps {
   gameVariants: { key: string; name: string }[];
   defaultPlayers: Player[];
   onStart: (params: { selectedGame: string; boardSize: number; players: Player[] }) => void;
+  onPlayersChange?: (players: Player[]) => void;
 }
 
 export default function StartScreen({
   gameVariants,
   onStart,
   defaultPlayers,
+  onPlayersChange,
 }: StartScreenProps) {
   const [selectedGame, setSelectedGame] = useState<string>(gameVariants[0].key);
   const [boardSize, setBoardSize] = useState<number>(4);
@@ -36,7 +38,11 @@ export default function StartScreen({
   const [colorIdx, setColorIdx] = useState<number|null>(null);
 
   const handlePlayerNameChange = (idx: number, value: string) => {
-    setPlayers(players => players.map((p, i) => i === idx ? { ...p, name: value } : p));
+    setPlayers(players => {
+      const updated = players.map((p, i) => i === idx ? { ...p, name: value } : p);
+      if (onPlayersChange) onPlayersChange(updated);
+      return updated;
+    });
   };
   const handleColorClick = (event: React.MouseEvent<HTMLElement>, idx: number) => {
     setColorAnchor(event.currentTarget);
@@ -44,10 +50,21 @@ export default function StartScreen({
   };
   const handleColorSelect = (color: string) => {
     if (colorIdx !== null) {
-      setPlayers(players => players.map((p, i) => i === colorIdx ? { ...p, color } : p));
+      setPlayers(players => {
+        const updated = players.map((p, i) => i === colorIdx ? { ...p, color } : p);
+        if (onPlayersChange) onPlayersChange(updated);
+        return updated;
+      });
     }
     setColorAnchor(null);
     setColorIdx(null);
+  };
+
+  // בעת התחלת משחק, כל הסטטיסטיקות יתאפסו כי onStart תמיד יוצר מערך שחקנים חדש עם score=0
+  const handleStart = () => {
+    // אפס ניקוד לכל שחקן
+    const resetPlayers = players.map(p => ({ ...p, score: 0 }));
+    onStart({ selectedGame, boardSize, players: resetPlayers });
   };
 
   return (
@@ -189,13 +206,8 @@ export default function StartScreen({
             color="primary"
             size="large"
             fullWidth
-            onClick={() => {
-              setSelectedGame(gameVariants[0].key);
-              setBoardSize(4);
-              setPlayers(defaultPlayers.slice(0, 2));
-              onStart({ selectedGame, boardSize, players });
-            }}
-            sx={{ fontWeight: 900, fontSize: 24, borderRadius: 99, py: 1.5, boxShadow: '0 2px 12px #1976d244', letterSpacing: 2, bgcolor: 'linear-gradient(90deg,#1976d2 60%,#64b5f6 100%)', mt: 2, mb: 1, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', textTransform: 'none', transition: 'all 0.2s', '&:hover': { bgcolor: '#1565c0' }, minWidth: 180 }}
+            sx={{ mt: 3, fontSize: 22, fontWeight: 800, borderRadius: 99, boxShadow: '0 2px 12px #1976d255', py: 1.5, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important' }}
+            onClick={handleStart}
           >
             התחל משחק
           </Button>

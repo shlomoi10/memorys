@@ -66,7 +66,7 @@ export default function App() {
     }
   }
 
-  // כאשר מתבצע שינוי כלשהו בהגדרות הכלליות, הוא מתעדכן בכל המשחקים
+  // כאשר מתבצע שינוי כלשהו בהגדרות הכלליות, הוא מתעדכן בכל המשחקים וגם בדף הבית
   // לדוג' שינוי שם/צבע שחקן:
   const handleSettingsChange = (newPlayers: Player[]) => {
     setSettings(prev => ({
@@ -92,11 +92,16 @@ export default function App() {
     }
   }, [settings]);
 
+  // חזרה לדף הבית לא תאפס את ה־state, רק תסגור את המשחק הנוכחי
+  const handleBackToHome = () => {
+    setSelectedGame(null);
+  };
+
   if (!selectedGame) {
     return (
       <StartScreen
         gameVariants={gameVariants}
-        defaultPlayers={defaultPlayers}
+        defaultPlayers={settings.players}
         onStart={({ selectedGame, boardSize, players }) => {
           setSettings({
             players,
@@ -106,6 +111,7 @@ export default function App() {
           });
           setSelectedGame(selectedGame);
         }}
+        onPlayersChange={handleSettingsChange}
       />
     );
   }
@@ -130,15 +136,13 @@ export default function App() {
         <Board
           cards={cards}
           onCardClick={onCardClick}
-          currentPlayerColor={settings.cardBackColors[currentPlayer]}
+          currentPlayerColor={players[currentPlayer]?.color}
         />
-        <div className="game-buttons-bar">
+        <div style={{ display: 'flex', gap: 12, marginTop: 28, justifyContent: 'center', width: '100%' }}>
           <button className="game-btn primary" onClick={reset}>התחל מחדש</button>
           <button className="game-btn" onClick={() => setShowSettings(true)} type="button">הגדרות שחקנים</button>
           <button className="game-btn" onClick={() => setShowInfo(true)} type="button">מידע וחוקים</button>
-          <button className="game-btn" onClick={() => {
-            window.location.reload();
-          }} type="button">חזרה לדף הבית</button>
+          <button className="game-btn" onClick={() => { reset(); setSelectedGame(null); }} type="button">חזרה לדף הבית</button>
         </div>
         <WinnerDialog
           open={isPopupOpen}
