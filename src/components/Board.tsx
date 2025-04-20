@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card } from '../core/BaseMemory';
 import MemoryCard from './MemoryCard';
+import './Board.css';
 
 interface BoardProps {
   cards: Card[];
@@ -9,9 +10,10 @@ interface BoardProps {
   boardSize?: number;
   cardOrientation?: 'portrait' | 'landscape';
   cardNameMode?: 'default' | 'none';
+  spacingMode?: 'default' | 'compact';
 }
 
-export default function Board({ cards, onCardClick, currentPlayerColor, boardSize, cardOrientation = 'portrait', cardNameMode = 'default' }: BoardProps) {
+export default function Board({ cards, onCardClick, currentPlayerColor, boardSize, cardOrientation = 'portrait', cardNameMode = 'default', spacingMode = 'default' }: BoardProps) {
   // פריסה תמיד מרובעת: מספר עמודות = שורש ריבועי של מספר הקלפים
   let columns = 4;
   if (boardSize && boardSize > 0) {
@@ -21,7 +23,7 @@ export default function Board({ cards, onCardClick, currentPlayerColor, boardSiz
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, gap: 24, justifyContent: 'center', margin: '40px 0' }}>
+    <div className={`board board-size-${boardSize} orientation-${cardOrientation} spacing-${spacingMode}`} style={{ display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, justifyContent: 'center', margin: '40px 0' }}>
       {cards.map(card => (
         <MemoryCard
           key={card.id}

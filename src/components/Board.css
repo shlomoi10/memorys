@@ -1,0 +1,16 @@
+.board.spacing-default {
+  gap: 24px;
+}
+
+.board.spacing-compact {
+  gap: 0px;
+}
+
+@media (max-width: 600px) {
+  .board.spacing-default {
+    gap: 14px;
+  }
+  .board.spacing-compact {
+    gap: 0px;
+  }
+}

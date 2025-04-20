@@ -6,9 +6,11 @@ interface CardSettingsSectionProps {
   onChange: (value: 'portrait' | 'landscape') => void;
   cardNameMode: 'default' | 'none';
   onCardNameModeChange: (mode: 'default' | 'none') => void;
+  spacingMode: 'default' | 'compact';
+  onSpacingModeChange: (mode: 'default' | 'compact') => void;
 }
 
-export default function CardSettingsSection({ orientation, onChange, cardNameMode, onCardNameModeChange }: CardSettingsSectionProps) {
+export default function CardSettingsSection({ orientation, onChange, cardNameMode, onCardNameModeChange, spacingMode, onSpacingModeChange }: CardSettingsSectionProps) {
   return (
     <Box sx={{ my: 2, p: 2, bgcolor: 'rgba(227,240,255,0.24)', borderRadius: 4, border: '1.5px solid #e3f0ff' }}>
       <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#1976d2', mb: 1, fontFamily: 'Heebo, Varela Round, Arial, sans-serif', fontSize: 18 }}>
@@ -101,6 +103,51 @@ export default function CardSettingsSection({ orientation, onChange, cardNameMod
             '&:hover': { bgcolor: '#e3f0ff', borderColor: '#1976d2' },
           }}>
             בלי שם
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 2, flexDirection: 'row' }}>
+        <Typography sx={{ fontWeight: 700, fontSize: 16, fontFamily: 'Heebo, Varela Round, Arial, sans-serif' }}>פריסה:</Typography>
+        <ToggleButtonGroup
+          value={spacingMode}
+          exclusive
+          onChange={(_, value) => value && onSpacingModeChange(value)}
+          color="primary"
+          sx={{ direction: 'rtl', gap: 1, bgcolor: 'transparent' }}
+        >
+          <ToggleButton value="default" sx={{
+            fontWeight: 700,
+            fontFamily: 'Heebo, Varela Round, Arial, sans-serif',
+            px: 4,
+            py: 1.2,
+            borderRadius: '0 99px 99px 0',
+            fontSize: 16,
+            border: '2px solid #e3f0ff',
+            bgcolor: spacingMode === 'default' ? '#e3f0ff' : '#fff',
+            color: spacingMode === 'default' ? '#1976d2' : '#1976d2',
+            boxShadow: spacingMode === 'default' ? '0 2px 8px #1976d244' : 'none',
+            mx: 0.5,
+            transition: 'all 0.18s',
+            '&:hover': { bgcolor: '#e3f0ff', borderColor: '#1976d2' },
+          }}>
+            מרווחת (ברירת מחדל)
+          </ToggleButton>
+          <ToggleButton value="compact" sx={{
+            fontWeight: 700,
+            fontFamily: 'Heebo, Varela Round, Arial, sans-serif',
+            px: 4,
+            py: 1.2,
+            borderRadius: '99px 0 0 99px',
+            fontSize: 16,
+            border: '2px solid #e3f0ff',
+            bgcolor: spacingMode === 'compact' ? '#e3f0ff' : '#fff',
+            color: spacingMode === 'compact' ? '#1976d2' : '#1976d2',
+            boxShadow: spacingMode === 'compact' ? '0 2px 8px #1976d244' : 'none',
+            mx: 0.5,
+            transition: 'all 0.18s',
+            '&:hover': { bgcolor: '#e3f0ff', borderColor: '#1976d2' },
+          }}>
+            צפופה (למסכים קטנים)
           </ToggleButton>
         </ToggleButtonGroup>
       </Box>

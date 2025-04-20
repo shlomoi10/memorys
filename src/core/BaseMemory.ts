@@ -32,6 +32,7 @@ export interface MemorySettings {
   boardSize?: number;
   cardOrientation?: 'portrait' | 'landscape'; // חדש: אורך/רוחב
   cardNameMode?: 'default' | 'none';
+  spacingMode?: 'default' | 'compact';
 }
 
 export interface MemoryState {

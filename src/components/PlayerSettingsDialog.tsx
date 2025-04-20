@@ -14,22 +14,26 @@ interface PlayerSettingsDialogProps {
   onCardOrientationChange?: (value: 'portrait' | 'landscape') => void;
   cardNameMode?: 'default' | 'none';
   onCardNameModeChange?: (mode: 'default' | 'none') => void;
+  spacingMode?: 'default' | 'compact';
+  onSpacingModeChange?: (mode: 'default' | 'compact') => void;
 }
 
 const colorOptions = ['#2196f3', '#4caf50', '#ff9800', '#e91e63', '#795548', '#607d8b'];
 
-export default function PlayerSettingsDialog({ open, players, onChange, onClose, cardOrientation = 'portrait', onCardOrientationChange, cardNameMode = 'default', onCardNameModeChange }: PlayerSettingsDialogProps) {
+export default function PlayerSettingsDialog({ open, players, onChange, onClose, cardOrientation = 'portrait', onCardOrientationChange, cardNameMode = 'default', onCardNameModeChange, spacingMode = 'default', onSpacingModeChange }: PlayerSettingsDialogProps) {
   const [localPlayers, setLocalPlayers] = useState(players);
   const [localOrientation, setLocalOrientation] = useState<'portrait' | 'landscape'>(cardOrientation);
   const [localCardNameMode, setLocalCardNameMode] = useState<'default' | 'none'>(cardNameMode);
+  const [localSpacingMode, setLocalSpacingMode] = useState<'default' | 'compact'>(spacingMode);
 
   useEffect(() => {
     if (open) {
       setLocalPlayers(players);
       setLocalOrientation(cardOrientation);
       setLocalCardNameMode(cardNameMode);
+      setLocalSpacingMode(spacingMode);
     }
-  }, [players, open, cardOrientation, cardNameMode]);
+  }, [players, open, cardOrientation, cardNameMode, spacingMode]);
 
   const handleNameChange = (idx: number, value: string) => {
     const updated = [...localPlayers];
@@ -48,6 +52,9 @@ export default function PlayerSettingsDialog({ open, players, onChange, onClose,
     }
     if (onCardNameModeChange) {
       onCardNameModeChange(localCardNameMode);
+    }
+    if (onSpacingModeChange) {
+      onSpacingModeChange(localSpacingMode);
     }
     onClose();
   };
@@ -117,7 +124,14 @@ export default function PlayerSettingsDialog({ open, players, onChange, onClose,
           </Grid>
         </Box>
         <Box sx={{ p: 3, pt: 2 }}>
-          <CardSettingsSection orientation={localOrientation} onChange={setLocalOrientation} cardNameMode={localCardNameMode} onCardNameModeChange={setLocalCardNameMode} />
+          <CardSettingsSection 
+            orientation={localOrientation} 
+            onChange={setLocalOrientation} 
+            cardNameMode={localCardNameMode} 
+            onCardNameModeChange={setLocalCardNameMode}
+            spacingMode={localSpacingMode}
+            onSpacingModeChange={setLocalSpacingMode}
+          />
         </Box>
       </DialogContent>
       <DialogActions className="player-settings-actions" sx={{

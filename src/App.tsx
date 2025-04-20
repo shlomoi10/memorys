@@ -35,6 +35,7 @@ export default function App() {
     cardBackColors: ['#2196f3', '#4caf50'],
     cardOrientation: 'portrait',
     cardNameMode: 'default',
+    spacingMode: 'default',
   });
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
@@ -42,6 +43,7 @@ export default function App() {
   const [winnerDialogClosed, setWinnerDialogClosed] = useState(false);
   const [cardOrientation, setCardOrientation] = useState<'portrait' | 'landscape'>(settings.cardOrientation || 'portrait');
   const [cardNameMode, setCardNameMode] = useState<'default' | 'none'>(settings.cardNameMode || 'default');
+  const [spacingMode, setSpacingMode] = useState<'default' | 'compact'>(settings.spacingMode || 'default');
 
   // הגדרות נשמרות ב-localStorage
   useEffect(() => {
@@ -58,7 +60,8 @@ export default function App() {
   useEffect(() => {
     setCardOrientation(settings.cardOrientation || 'portrait');
     setCardNameMode(settings.cardNameMode || 'default');
-  }, [settings.cardOrientation, settings.cardNameMode]);
+    setSpacingMode(settings.spacingMode || 'default');
+  }, [settings.cardOrientation, settings.cardNameMode, settings.spacingMode]);
 
   // שינוי הגדרות כלליות (שמות, צבעים, שחקנים) יתעדכן אוטומטית בכל המשחקים
   // כל hook של משחק יקבל תמיד את settings המשותף
@@ -106,6 +109,11 @@ export default function App() {
   const handleCardNameModeChange = (mode: 'default' | 'none') => {
     setCardNameMode(mode);
     setSettings(prev => ({ ...prev, cardNameMode: mode }));
+  };
+
+  const handleSpacingModeChange = (mode: 'default' | 'compact') => {
+    setSpacingMode(mode);
+    setSettings(prev => ({ ...prev, spacingMode: mode }));
   };
 
   const handleWinnerDialogClose = () => {
@@ -179,10 +187,11 @@ export default function App() {
           boardSize={settings.boardSize}
           cardOrientation={cardOrientation}
           cardNameMode={cardNameMode}
+          spacingMode={spacingMode}
         />
         <div style={{ display: 'flex', gap: 12, marginTop: 28, justifyContent: 'center', width: '100%' }}>
           <button className="game-btn primary" onClick={reset}>התחל מחדש</button>
-          <button className="game-btn" onClick={() => setShowSettings(true)} type="button">הגדרות שחקנים</button>
+          <button className="game-btn" onClick={() => setShowSettings(true)} type="button">הגדרות</button>
           <button className="game-btn" onClick={() => setShowInfo(true)} type="button">מידע וחוקים</button>
           <button className="game-btn" onClick={() => { reset(); setSelectedGame(null); }} type="button">חזרה לדף הבית</button>
         </div>
@@ -200,6 +209,8 @@ export default function App() {
           onCardOrientationChange={handleCardOrientationChange}
           cardNameMode={cardNameMode}
           onCardNameModeChange={handleCardNameModeChange}
+          spacingMode={spacingMode}
+          onSpacingModeChange={handleSpacingModeChange}
         />
         <GameInfoDialog open={showInfo} onClose={() => setShowInfo(false)} gameName={gameName} rules={gameRules} />
       </GameLayout>

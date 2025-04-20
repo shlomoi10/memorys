@@ -24,6 +24,9 @@ export default function SettingsDialog({ open, settings, onChange, onClose }: Se
   const handleCardNameModeChange = (mode: 'default' | 'none') => {
     setLocalSettings((prev: any) => ({ ...prev, cardNameMode: mode }));
   };
+  const handleSpacingModeChange = (mode: 'default' | 'compact') => {
+    setLocalSettings((prev: any) => ({ ...prev, spacingMode: mode }));
+  };
 
   const handleSave = () => {
     onChange(localSettings);
@@ -46,6 +49,8 @@ export default function SettingsDialog({ open, settings, onChange, onClose }: Se
           onChange={handleCardOrientationChange}
           cardNameMode={localSettings.cardNameMode || 'default'}
           onCardNameModeChange={handleCardNameModeChange}
+          spacingMode={localSettings.spacingMode || 'default'}
+          onSpacingModeChange={handleSpacingModeChange}
         />
         {/* כאן אפשר להוסיף עוד אזורי הגדרות בעתיד */}
       </DialogContent>
