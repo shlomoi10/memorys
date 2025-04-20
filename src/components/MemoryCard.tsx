@@ -23,6 +23,16 @@ export default function MemoryCard({ card, onClick, backColor, disabled, orienta
     height = rotate ? 78 : 105;
     emojiSize = 32;
   }
+  // אם showName=false ("בלי תגית") - הקטן גובה/רוחב
+  if (!showName) {
+    if (rotate) {
+      width = Math.round(width * 0.77);
+      if (cardSizeMode === 'small') width = Math.round(width * 0.88);
+    } else {
+      height = Math.round(height * 0.77);
+      if (cardSizeMode === 'small') height = Math.round(height * 0.88);
+    }
+  }
   return (
     <Box sx={{
       perspective: 900,
@@ -71,9 +81,20 @@ export default function MemoryCard({ card, onClick, backColor, disabled, orienta
               )}
               {/* שם האימוג'י */}
               {showName && (
-                <Typography variant="caption" sx={{ display: 'block', fontWeight: 800, color: '#1976d2', fontSize: 16, mt: 1, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', letterSpacing: 0.5 }}>
-                  {card.emoji.name}
-                </Typography>
+                <span style={{
+                  display: 'block',
+                  fontFamily: 'Heebo, Varela Round, Arial, sans-serif',
+                  fontWeight: 700,
+                  fontSize: cardSizeMode === 'small' ? 13 : 16,
+                  color: '#1976d2',
+                  margin: 0,
+                  marginTop: 3,
+                  letterSpacing: 0.3,
+                  direction: 'rtl',
+                  textAlign: 'center',
+                }}>
+                  {card.emoji.name || card.emoji.shortName}
+                </span>
               )}
               {card.type === 'action' && (
                 <Typography variant="caption" color="primary" sx={{ display: 'block', fontWeight: 700, fontSize: 13, mt: 0.5 }}>
