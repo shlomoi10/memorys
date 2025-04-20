@@ -131,13 +131,14 @@ export default function App() {
           let numPairs = 8;
           if (boardSize === 6) numPairs = 18;
           else if (boardSize === 8) numPairs = 32;
-          setSettings({
+          setSettings(prev => ({
+            ...prev,
             players,
             currentPlayer: 0,
             cardBackColors: players.map(p => p.color),
             boardSize,
             numPairs,
-          });
+          }));
           setSelectedGame(selectedGame);
         }}
         onPlayersChange={handleSettingsChange}
@@ -168,6 +169,7 @@ export default function App() {
           onCardClick={onCardClick}
           currentPlayerColor={players[currentPlayer]?.color}
           boardSize={settings.boardSize}
+          cardOrientation={cardOrientation}
         />
         <div style={{ display: 'flex', gap: 12, marginTop: 28, justifyContent: 'center', width: '100%' }}>
           <button className="game-btn primary" onClick={reset}>התחל מחדש</button>
