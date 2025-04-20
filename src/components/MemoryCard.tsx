@@ -8,9 +8,10 @@ interface MemoryCardProps {
   backColor: string;
   disabled?: boolean;
   orientation?: 'portrait' | 'landscape';
+  showName?: boolean;
 }
 
-export default function MemoryCard({ card, onClick, backColor, disabled, orientation = 'portrait' }: MemoryCardProps) {
+export default function MemoryCard({ card, onClick, backColor, disabled, orientation = 'portrait', showName = true }: MemoryCardProps) {
   const rotate = orientation === 'landscape';
   return (
     <Box sx={{
@@ -59,9 +60,11 @@ export default function MemoryCard({ card, onClick, backColor, disabled, orienta
                 </Box>
               )}
               {/* שם האימוג'י */}
-              <Typography variant="caption" sx={{ display: 'block', fontWeight: 800, color: '#1976d2', fontSize: 16, mt: 1, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', letterSpacing: 0.5 }}>
-                {card.emoji.name}
-              </Typography>
+              {showName && (
+                <Typography variant="caption" sx={{ display: 'block', fontWeight: 800, color: '#1976d2', fontSize: 16, mt: 1, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', letterSpacing: 0.5 }}>
+                  {card.emoji.name}
+                </Typography>
+              )}
               {card.type === 'action' && (
                 <Typography variant="caption" color="primary" sx={{ display: 'block', fontWeight: 700, fontSize: 13, mt: 0.5 }}>
                   {card.actionType === 'reveal-pair' ? 'קלף פעולה: גלה זוג' : card.actionType === 'shuffle' ? 'קלף פעולה: ערבב' : ''}

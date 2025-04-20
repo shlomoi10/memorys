@@ -31,6 +31,7 @@ export interface MemorySettings {
   timerEnabled?: boolean;
   boardSize?: number;
   cardOrientation?: 'portrait' | 'landscape'; // חדש: אורך/רוחב
+  cardNameMode?: 'default' | 'none';
 }
 
 export interface MemoryState {

@@ -34,12 +34,14 @@ export default function App() {
     currentPlayer: 0,
     cardBackColors: ['#2196f3', '#4caf50'],
     cardOrientation: 'portrait',
+    cardNameMode: 'default',
   });
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [winnerDialogClosed, setWinnerDialogClosed] = useState(false);
   const [cardOrientation, setCardOrientation] = useState<'portrait' | 'landscape'>(settings.cardOrientation || 'portrait');
+  const [cardNameMode, setCardNameMode] = useState<'default' | 'none'>(settings.cardNameMode || 'default');
 
   // הגדרות נשמרות ב-localStorage
   useEffect(() => {
@@ -52,10 +54,11 @@ export default function App() {
     localStorage.setItem('memorySettings', JSON.stringify(settings));
   }, [settings]);
 
-  // שמירה וטעינה של הגדרות כולל cardOrientation
+  // שמירה וטעינה של הגדרות כולל cardOrientation ו-cardNameMode
   useEffect(() => {
     setCardOrientation(settings.cardOrientation || 'portrait');
-  }, [settings.cardOrientation]);
+    setCardNameMode(settings.cardNameMode || 'default');
+  }, [settings.cardOrientation, settings.cardNameMode]);
 
   // שינוי הגדרות כלליות (שמות, צבעים, שחקנים) יתעדכן אוטומטית בכל המשחקים
   // כל hook של משחק יקבל תמיד את settings המשותף
@@ -98,6 +101,11 @@ export default function App() {
   const handleCardOrientationChange = (value: 'portrait' | 'landscape') => {
     setCardOrientation(value);
     setSettings(prev => ({ ...prev, cardOrientation: value }));
+  };
+
+  const handleCardNameModeChange = (mode: 'default' | 'none') => {
+    setCardNameMode(mode);
+    setSettings(prev => ({ ...prev, cardNameMode: mode }));
   };
 
   const handleWinnerDialogClose = () => {
@@ -170,6 +178,7 @@ export default function App() {
           currentPlayerColor={players[currentPlayer]?.color}
           boardSize={settings.boardSize}
           cardOrientation={cardOrientation}
+          cardNameMode={cardNameMode}
         />
         <div style={{ display: 'flex', gap: 12, marginTop: 28, justifyContent: 'center', width: '100%' }}>
           <button className="game-btn primary" onClick={reset}>התחל מחדש</button>
@@ -189,6 +198,8 @@ export default function App() {
           onClose={() => setShowSettings(false)}
           cardOrientation={cardOrientation}
           onCardOrientationChange={handleCardOrientationChange}
+          cardNameMode={cardNameMode}
+          onCardNameModeChange={handleCardNameModeChange}
         />
         <GameInfoDialog open={showInfo} onClose={() => setShowInfo(false)} gameName={gameName} rules={gameRules} />
       </GameLayout>

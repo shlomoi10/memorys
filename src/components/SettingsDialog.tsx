@@ -21,6 +21,9 @@ export default function SettingsDialog({ open, settings, onChange, onClose }: Se
   const handleCardOrientationChange = (value: 'portrait' | 'landscape') => {
     setLocalSettings((prev: any) => ({ ...prev, cardOrientation: value }));
   };
+  const handleCardNameModeChange = (mode: 'default' | 'none') => {
+    setLocalSettings((prev: any) => ({ ...prev, cardNameMode: mode }));
+  };
 
   const handleSave = () => {
     onChange(localSettings);
@@ -38,7 +41,12 @@ export default function SettingsDialog({ open, settings, onChange, onClose }: Se
       </DialogTitle>
       <DialogContent>
         {/* אזור הגדרות קלפים */}
-        <CardSettingsSection orientation={localSettings.cardOrientation || 'portrait'} onChange={handleCardOrientationChange} />
+        <CardSettingsSection 
+          orientation={localSettings.cardOrientation || 'portrait'}
+          onChange={handleCardOrientationChange}
+          cardNameMode={localSettings.cardNameMode || 'default'}
+          onCardNameModeChange={handleCardNameModeChange}
+        />
         {/* כאן אפשר להוסיף עוד אזורי הגדרות בעתיד */}
       </DialogContent>
       <DialogActions>

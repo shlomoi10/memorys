@@ -7,9 +7,11 @@ interface BoardProps {
   onCardClick: (cardId: string) => void;
   currentPlayerColor: string;
   boardSize?: number;
+  cardOrientation?: 'portrait' | 'landscape';
+  cardNameMode?: 'default' | 'none';
 }
 
-export default function Board({ cards, onCardClick, currentPlayerColor, boardSize }: BoardProps) {
+export default function Board({ cards, onCardClick, currentPlayerColor, boardSize, cardOrientation = 'portrait', cardNameMode = 'default' }: BoardProps) {
   // פריסה תמיד מרובעת: מספר עמודות = שורש ריבועי של מספר הקלפים
   let columns = 4;
   if (boardSize && boardSize > 0) {
@@ -27,6 +29,8 @@ export default function Board({ cards, onCardClick, currentPlayerColor, boardSiz
           onClick={onCardClick}
           backColor={currentPlayerColor}
           disabled={card.isMatched}
+          orientation={cardOrientation}
+          showName={cardNameMode === 'default'}
         />
       ))}
     </div>
