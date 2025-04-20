@@ -6,6 +6,7 @@ import GameInfoDialog from './components/GameInfoDialog';
 import WinnerDialog from './components/WinnerDialog';
 import StartScreen from './components/StartScreen';
 import PlayerSettingsDialog from './components/PlayerSettingsDialog';
+import PanelButtons from './components/PanelButtons';
 import { useClassicMemory } from './hooks/useClassicMemory';
 import { useMinScoreMemory } from './hooks/useMinScoreMemory';
 import { useTripletMemory } from './hooks/useTripletMemory';
@@ -175,19 +176,31 @@ export default function App() {
     return (
       <GameLayout
         sidePanel={
-          <SidePanel
-            players={players}
-            currentPlayer={currentPlayer}
-            gameName={gameName}
-            rules={gameRules}
-            timer={timer}
-            pairsFound={pairsFound}
-            totalPairs={totalPairs}
-            moves={moves}
-            cards={cards}
-          />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, height: '100%', marginBottom: 36 }}>
+            <div style={{ flex: 1, minHeight: 0 }}>
+              <SidePanel
+                players={players}
+                currentPlayer={currentPlayer}
+                gameName={gameName}
+                rules={gameRules}
+                timer={timer}
+                pairsFound={pairsFound}
+                totalPairs={totalPairs}
+                moves={moves}
+                cards={cards}
+              />
+            </div>
+          </div>
         }
       >
+        <div style={{ display: 'flex', gap: 14, justifyContent: 'center', margin: '24px 0 12px 0' }}>
+          <PanelButtons
+            onRestart={reset}
+            onSettings={() => setShowSettings(true)}
+            onInfo={() => setShowInfo(true)}
+            onBackToHome={() => { reset(); setSelectedGame(null); }}
+          />
+        </div>
         <Board
           cards={cards}
           onCardClick={onCardClick}
@@ -198,12 +211,6 @@ export default function App() {
           spacingMode={spacingMode}
           cardSizeMode={cardSizeMode}
         />
-        <div style={{ display: 'flex', gap: 12, marginTop: 28, justifyContent: 'center', width: '100%' }}>
-          <button className="game-btn primary" onClick={reset}>התחל מחדש</button>
-          <button className="game-btn" onClick={() => setShowSettings(true)} type="button">הגדרות</button>
-          <button className="game-btn" onClick={() => setShowInfo(true)} type="button">מידע וחוקים</button>
-          <button className="game-btn" onClick={() => { reset(); setSelectedGame(null); }} type="button">חזרה לדף הבית</button>
-        </div>
         <WinnerDialog
           open={isPopupOpen}
           winner={winner ? winner.name : ''}
