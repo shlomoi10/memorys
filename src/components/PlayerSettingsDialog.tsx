@@ -30,14 +30,20 @@ export default function PlayerSettingsDialog({ open, players, onChange, onClose,
   const [localCardSizeMode, setLocalCardSizeMode] = useState<'default' | 'small'>(cardSizeMode);
 
   useEffect(() => {
-    if (open) {
-      setLocalPlayers(players);
-      setLocalOrientation(cardOrientation);
-      setLocalCardNameMode(cardNameMode);
-      setLocalSpacingMode(spacingMode);
-      setLocalCardSizeMode(cardSizeMode);
-    }
-  }, [players, open, cardOrientation, cardNameMode, spacingMode, cardSizeMode]);
+    setLocalPlayers(players);
+  }, [players]);
+  useEffect(() => {
+    setLocalOrientation(cardOrientation);
+  }, [cardOrientation]);
+  useEffect(() => {
+    setLocalCardNameMode(cardNameMode);
+  }, [cardNameMode]);
+  useEffect(() => {
+    setLocalSpacingMode(spacingMode);
+  }, [spacingMode]);
+  useEffect(() => {
+    setLocalCardSizeMode(cardSizeMode);
+  }, [cardSizeMode]);
 
   const handleNameChange = (idx: number, value: string) => {
     const updated = [...localPlayers];
@@ -50,18 +56,26 @@ export default function PlayerSettingsDialog({ open, players, onChange, onClose,
     setLocalPlayers(updated);
   };
   const handleSave = () => {
-    onChange(localPlayers);
-    if (onCardOrientationChange) {
+    let changed = false;
+    if (JSON.stringify(localPlayers) !== JSON.stringify(players)) {
+      onChange(localPlayers);
+      changed = true;
+    }
+    if (onCardOrientationChange && localOrientation !== cardOrientation) {
       onCardOrientationChange(localOrientation);
+      changed = true;
     }
-    if (onCardNameModeChange) {
+    if (onCardNameModeChange && localCardNameMode !== cardNameMode) {
       onCardNameModeChange(localCardNameMode);
+      changed = true;
     }
-    if (onSpacingModeChange) {
+    if (onSpacingModeChange && localSpacingMode !== spacingMode) {
       onSpacingModeChange(localSpacingMode);
+      changed = true;
     }
-    if (onCardSizeModeChange) {
+    if (onCardSizeModeChange && localCardSizeMode !== cardSizeMode) {
       onCardSizeModeChange(localCardSizeMode);
+      changed = true;
     }
     onClose();
   };

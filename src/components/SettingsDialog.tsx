@@ -32,7 +32,9 @@ export default function SettingsDialog({ open, settings, onChange, onClose }: Se
   };
 
   const handleSave = () => {
-    onChange(localSettings);
+    if (JSON.stringify(localSettings) !== JSON.stringify(settings)) {
+      onChange(localSettings);
+    }
     onClose();
   };
   const handleCancel = () => {

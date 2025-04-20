@@ -37,10 +37,6 @@ export default function App() {
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const [cardOrientation, setCardOrientation] = useState<'portrait' | 'landscape'>(settings.cardOrientation || 'portrait');
-  const [cardNameMode, setCardNameMode] = useState<'default' | 'none'>(settings.cardNameMode || 'default');
-  const [spacingMode, setSpacingMode] = useState<'default' | 'compact'>(settings.spacingMode || 'default');
-  const [cardSizeMode, setCardSizeMode] = useState<'default' | 'small'>(settings.cardSizeMode || 'default');
 
   // הגדרות נשמרות ב-localStorage
   useEffect(() => {
@@ -52,14 +48,6 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('memorySettings', JSON.stringify(settings));
   }, [settings]);
-
-  // שמירה וטעינה של הגדרות כולל cardOrientation ו-cardNameMode
-  useEffect(() => {
-    setCardOrientation(settings.cardOrientation || 'portrait');
-    setCardNameMode(settings.cardNameMode || 'default');
-    setSpacingMode(settings.spacingMode || 'default');
-    setCardSizeMode(settings.cardSizeMode || 'default');
-  }, [settings.cardOrientation, settings.cardNameMode, settings.spacingMode, settings.cardSizeMode]);
 
   // שינוי הגדרות כלליות (שמות, צבעים, שחקנים) יתעדכן אוטומטית בכל המשחקים
   // כל hook של משחק יקבל תמיד את settings המשותף
@@ -103,22 +91,18 @@ export default function App() {
 
   // שינוי כיוון קלפים
   const handleCardOrientationChange = (value: 'portrait' | 'landscape') => {
-    setCardOrientation(value);
     setSettings(prev => ({ ...prev, cardOrientation: value }));
   };
 
   const handleCardNameModeChange = (mode: 'default' | 'none') => {
-    setCardNameMode(mode);
     setSettings(prev => ({ ...prev, cardNameMode: mode }));
   };
 
   const handleSpacingModeChange = (mode: 'default' | 'compact') => {
-    setSpacingMode(mode);
     setSettings(prev => ({ ...prev, spacingMode: mode }));
   };
 
   const handleCardSizeModeChange = (mode: 'default' | 'small') => {
-    setCardSizeMode(mode);
     setSettings(prev => ({ ...prev, cardSizeMode: mode }));
   };
 
@@ -197,10 +181,10 @@ export default function App() {
           onCardClick={onCardClick}
           currentPlayerColor={players[currentPlayer]?.color}
           boardSize={settings.boardSize}
-          cardOrientation={cardOrientation}
-          cardNameMode={cardNameMode}
-          spacingMode={spacingMode}
-          cardSizeMode={cardSizeMode}
+          cardOrientation={settings.cardOrientation}
+          cardNameMode={settings.cardNameMode}
+          spacingMode={settings.spacingMode}
+          cardSizeMode={settings.cardSizeMode}
         />
         <WinnerDialog
           open={isPopupOpen}
@@ -225,13 +209,13 @@ export default function App() {
           players={players}
           onChange={handleSettingsChange}
           onClose={() => setShowSettings(false)}
-          cardOrientation={cardOrientation}
+          cardOrientation={settings.cardOrientation}
           onCardOrientationChange={handleCardOrientationChange}
-          cardNameMode={cardNameMode}
+          cardNameMode={settings.cardNameMode}
           onCardNameModeChange={handleCardNameModeChange}
-          spacingMode={spacingMode}
+          spacingMode={settings.spacingMode}
           onSpacingModeChange={handleSpacingModeChange}
-          cardSizeMode={cardSizeMode}
+          cardSizeMode={settings.cardSizeMode}
           onCardSizeModeChange={handleCardSizeModeChange}
         />
         <GameInfoDialog open={showInfo} onClose={() => setShowInfo(false)} gameName={gameName} rules={gameRules} />
