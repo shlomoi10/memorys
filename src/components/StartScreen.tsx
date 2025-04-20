@@ -85,41 +85,75 @@ export default function StartScreen({
           <ToggleButtonGroup
             value={selectedGame}
             exclusive
-            onChange={(_, val) => val && setSelectedGame(val)}
+            onChange={(_, val) => {
+              // לא לאפשר לחיצה על משחקים לא זמינים
+              if (val === 'classic' || val === 'cumulative') setSelectedGame(val);
+            }}
             sx={{ mb: 3, display: 'flex', justifyContent: 'center', overflow: 'hidden', borderRadius: 99, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', boxShadow: '0 2px 12px #1976d244' }}
           >
-            {gameVariants.map((g: { key: string; name: string }, idx) => (
-              <ToggleButton
-                key={g.key}
-                value={g.key}
-                sx={{
-                  fontSize: 20,
-                  px: 3,
-                  borderRadius:
-                    idx === 0
-                      ? '0 99px 99px 0'
-                      : idx === gameVariants.length - 1
-                      ? '99px 0 0 99px'
-                      : '0',
-                  boxShadow: 'none',
-                  bgcolor: selectedGame === g.key ? 'linear-gradient(90deg,#1976d2 60%,#64b5f6 100%)' : '#fff',
-                  color: selectedGame === g.key ? '#fff' : '#1565c0',
-                  fontWeight: selectedGame === g.key ? 900 : 600,
-                  transition: 'all 0.2s',
-                  border: 'none',
-                  fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important',
-                  textTransform: 'none',
-                  minWidth: 120,
-                  boxSizing: 'border-box',
-                  zIndex: selectedGame === g.key ? 2 : 1,
-                }}
-              >
-                <SportsEsportsIcon sx={{ mr: 1, fontSize: 26 }} />
-                {g.name}
-              </ToggleButton>
-            ))}
+            {gameVariants.map((g: { key: string; name: string }, idx) => {
+              const isDisabled = g.key !== 'classic' && g.key !== 'cumulative';
+              return (
+                <ToggleButton
+                  key={g.key}
+                  value={g.key}
+                  disabled={isDisabled}
+                  sx={{
+                    fontSize: 20,
+                    px: 3,
+                    borderRadius:
+                      idx === 0
+                        ? '0 99px 99px 0'
+                        : idx === gameVariants.length - 1
+                        ? '99px 0 0 99px'
+                        : '0',
+                    boxShadow: 'none',
+                    bgcolor: selectedGame === g.key ? 'linear-gradient(90deg,#1976d2 60%,#64b5f6 100%)' : '#fff',
+                    color: selectedGame === g.key ? '#fff' : '#1565c0',
+                    fontWeight: selectedGame === g.key ? 900 : 600,
+                    transition: 'all 0.2s',
+                    border: 'none',
+                    fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important',
+                    textTransform: 'none',
+                    minWidth: 120,
+                    boxSizing: 'border-box',
+                    zIndex: selectedGame === g.key ? 2 : 1,
+                    opacity: isDisabled ? 0.55 : 1,
+                    cursor: isDisabled ? 'not-allowed' : 'pointer',
+                    position: 'relative',
+                  }}
+                >
+                  <SportsEsportsIcon sx={{ mr: 1, fontSize: 26 }} />
+                  {g.name}
+                  {/* טול־טיפ "בבנייה" */}
+                  {isDisabled && (
+                    <Box sx={{
+                      position: 'absolute',
+                      top: 5,
+                      left: 0,
+                      right: 0,
+                      mx: 'auto',
+                      width: '80%',
+                      bgcolor: '#fffbe7',
+                      color: '#e65100',
+                      borderRadius: 2,
+                      fontWeight: 800,
+                      fontSize: 15,
+                      py: 0.3,
+                      textAlign: 'center',
+                      boxShadow: '0 1.5px 6px #ff980022',
+                      border: '1.5px solid #ffe0b2',
+                      pointerEvents: 'none',
+                      letterSpacing: 0.5,
+                    }}>
+                      בבנייה
+                    </Box>
+                  )}
+                </ToggleButton>
+              );
+            })}
           </ToggleButtonGroup>
-          <Typography variant="h5" sx={{ mb: 1, color: '#222', fontWeight: 800, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important' }}>בחר רמת קושי:</Typography>
+          <Typography variant="h5" sx={{ mb: 1, color: '#222', fontWeight: 800, letterSpacing: 0.5, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important' }}>בחר רמת קושי:</Typography>
           <ToggleButtonGroup
             value={boardSize}
             exclusive
