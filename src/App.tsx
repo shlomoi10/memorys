@@ -12,6 +12,7 @@ import { useMinScoreMemory } from './hooks/useMinScoreMemory';
 import { useTripletMemory } from './hooks/useTripletMemory';
 import { useCategoriesMemory } from './hooks/useCategoriesMemory';
 import { useActionCardsMemory } from './hooks/useActionCardsMemory';
+import { useCumulativeScoreMemory } from './hooks/useCumulativeScoreMemory';
 import { GAME_RULES } from './constants/gameRules';
 import { MemorySettings, Player } from './core/BaseMemory';
 import './AppButtons.css';
@@ -23,6 +24,7 @@ const defaultPlayers: Player[] = [
 
 const gameVariants = [
   { key: 'classic', name: 'זיכרון קלאסי', hook: useClassicMemory },
+  { key: 'cumulative', name: 'ניקוד מצטבר', hook: useCumulativeScoreMemory },
   { key: 'minscore', name: 'מינימום ניקוד', hook: useMinScoreMemory },
   { key: 'triplet', name: 'השלישייה', hook: useTripletMemory },
   { key: 'categories', name: 'קטגוריות', hook: useCategoriesMemory },
@@ -70,6 +72,7 @@ export default function App() {
   // שינוי הגדרות כלליות (שמות, צבעים, שחקנים) יתעדכן אוטומטית בכל המשחקים
   // כל hook של משחק יקבל תמיד את settings המשותף
   const classic = useClassicMemory(settings);
+  const cumulative = useCumulativeScoreMemory(settings);
   const minscore = useMinScoreMemory(settings);
   const triplet = useTripletMemory(settings);
   const categories = useCategoriesMemory(settings);
@@ -77,6 +80,7 @@ export default function App() {
 
   const variantMap: Record<string, any> = {
     classic,
+    cumulative,
     minscore,
     triplet,
     categories,

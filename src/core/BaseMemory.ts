@@ -13,6 +13,7 @@ export interface Card {
   category?: string;
   isOpen: boolean;
   isMatched: boolean;
+  pairScore?: number; // ניקוד לזוג (משמש בניקוד מצטבר)
 }
 
 export interface Player {

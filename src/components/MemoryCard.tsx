@@ -117,6 +117,29 @@ export default function MemoryCard({ card, onClick, backColor, disabled, orienta
                   {card.emoji.name || card.emoji.shortName}
                 </span>
               )}
+              {/* ניקוד זוגי בקלף - יופיע רק אם יש pairScore */}
+              {typeof card.pairScore === 'number' && (
+                <Box sx={{
+                  display: 'flex', justifyContent: 'center', alignItems: 'center',
+                  mt: 0.5,
+                }}>
+                  <Box sx={{
+                    bgcolor: '#fff',
+                    color: '#1976d2',
+                    px: 1.1,
+                    py: 0.2,
+                    borderRadius: 2,
+                    fontWeight: 700,
+                    fontSize: cardSizeMode === 'small' ? 13 : 17,
+                    boxShadow: '0 1.5px 6px #1976d222',
+                    border: '1.5px solid #b6c9ff',
+                    minWidth: 30,
+                    textAlign: 'center',
+                  }}>
+                    {card.pairScore}
+                  </Box>
+                </Box>
+              )}
               {card.type === 'action' && (
                 <Typography variant="caption" color="primary" sx={{ display: 'block', fontWeight: 700, fontSize: 13, mt: 0.5 }}>
                   {card.actionType === 'reveal-pair' ? 'קלף פעולה: גלה זוג' : card.actionType === 'shuffle' ? 'קלף פעולה: ערבב' : ''}
