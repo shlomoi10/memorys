@@ -1,5 +1,5 @@
 // Emoji Helper - בוחר אימוג'ים מגוונים (לא רק פרצופים, ללא חזירים)
-import openmoji from '../assets/openmoji.json';
+// הסרתי את הייבוא של openmoji כי אינו בשימוש
 import { emojiList } from './emojiList';
 
 // מחזיר מערך של אובייקטי EmojiItem מלאים (כולל name)

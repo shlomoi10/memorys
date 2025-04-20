@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Card } from '../core/BaseMemory';
 import { Box, Paper, Typography } from '@mui/material';
 

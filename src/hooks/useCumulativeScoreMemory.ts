@@ -50,7 +50,7 @@ export function useCumulativeScoreMemory(settings: MemorySettings) {
     setCurrentPlayer(settings.currentPlayer);
     setWinner(null);
     setIsPopupOpen(false);
-  }, [settings.numPairs, settings.currentPlayer]);
+  }, [settings.numPairs, settings.currentPlayer, settings.players]);
 
   useEffect(() => {
     setMoves(0);

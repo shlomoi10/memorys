@@ -38,7 +38,7 @@ export function useLowScoreMemory(settings: MemorySettings) {
       name: settings.players[idx]?.name || p.name,
       color: settings.players[idx]?.color || p.color,
     })));
-  }, [settings.players]);
+  }, [settings.players, settings]);
 
   useEffect(() => {
     const numPairs = settings.numPairs || 8;
@@ -49,7 +49,7 @@ export function useLowScoreMemory(settings: MemorySettings) {
     setCurrentPlayer(settings.currentPlayer);
     setWinner(null);
     setIsPopupOpen(false);
-  }, [settings.numPairs, settings.currentPlayer]);
+  }, [settings.numPairs, settings.currentPlayer, settings.players]);
 
   useEffect(() => {
     setMoves(0);

@@ -8,10 +8,6 @@ import StartScreen from './components/StartScreen';
 import PlayerSettingsDialog from './components/PlayerSettingsDialog';
 import PanelButtons from './components/PanelButtons';
 import { useClassicMemory } from './hooks/useClassicMemory';
-import { useMinScoreMemory } from './hooks/useMinScoreMemory';
-import { useTripletMemory } from './hooks/useTripletMemory';
-import { useCategoriesMemory } from './hooks/useCategoriesMemory';
-import { useActionCardsMemory } from './hooks/useActionCardsMemory';
 import { useCumulativeScoreMemory } from './hooks/useCumulativeScoreMemory';
 import { useLowScoreMemory } from './hooks/useLowScoreMemory';
 import { GAME_RULES } from './constants/gameRules';
@@ -26,10 +22,6 @@ const defaultPlayers: Player[] = [
 const gameVariants = [
   { key: 'classic', name: 'זיכרון קלאסי', hook: useClassicMemory },
   { key: 'cumulative', name: 'ניקוד מצטבר', hook: useCumulativeScoreMemory },
-  { key: 'minscore', name: 'מינימום ניקוד', hook: useMinScoreMemory },
-  { key: 'triplet', name: 'השלישייה', hook: useTripletMemory },
-  { key: 'categories', name: 'קטגוריות', hook: useCategoriesMemory },
-  { key: 'actioncards', name: 'קלפי פעולה', hook: useActionCardsMemory },
 ];
 
 export default function App() {
@@ -45,7 +37,6 @@ export default function App() {
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const [winnerDialogClosed, setWinnerDialogClosed] = useState(false);
   const [cardOrientation, setCardOrientation] = useState<'portrait' | 'landscape'>(settings.cardOrientation || 'portrait');
   const [cardNameMode, setCardNameMode] = useState<'default' | 'none'>(settings.cardNameMode || 'default');
   const [spacingMode, setSpacingMode] = useState<'default' | 'compact'>(settings.spacingMode || 'default');
@@ -74,19 +65,11 @@ export default function App() {
   // כל hook של משחק יקבל תמיד את settings המשותף
   const classic = useClassicMemory(settings);
   const cumulative = useCumulativeScoreMemory(settings);
-  const minscore = useMinScoreMemory(settings);
-  const triplet = useTripletMemory(settings);
-  const categories = useCategoriesMemory(settings);
-  const actioncards = useActionCardsMemory(settings);
   const lowscore = useLowScoreMemory(settings);
 
   const variantMap: Record<string, any> = {
     classic,
     cumulative,
-    minscore,
-    triplet,
-    categories,
-    actioncards,
     lowscore,
   };
 
@@ -95,11 +78,13 @@ export default function App() {
     { key: 'lowscore', name: 'ניקוד נמוך', hook: useLowScoreMemory },
   ];
 
+  const filteredGameVariants = extendedGameVariants.filter(g => g.key !== 'minscore');
+
   let gameHookResult = selectedGame ? variantMap[selectedGame] : null;
   let gameName = '';
   let gameRules = '';
   if (selectedGame) {
-    const variant = extendedGameVariants.find(g => g.key === selectedGame);
+    const variant = filteredGameVariants.find(g => g.key === selectedGame);
     if (variant) {
       gameName = variant.name;
       gameRules = GAME_RULES[selectedGame] || '';
@@ -137,32 +122,12 @@ export default function App() {
     setSettings(prev => ({ ...prev, cardSizeMode: mode }));
   };
 
-  const handleWinnerDialogClose = () => {
-    setWinnerDialogClosed(true);
-    // הפעל משחק חדש על ידי שינוי settings (טריגר לאיפוס)
-    setSettings(prev => ({
-      ...prev,
-      // שינוי קטן כדי לטרגר את useEffect של useClassicMemory
-      players: prev.players.map(p => ({ ...p })),
-    }));
-  };
-
-  useEffect(() => {
-    if (winnerDialogClosed) {
-      setWinnerDialogClosed(false);
-    }
-  }, [settings]);
-
-  // חזרה לדף הבית לא תאפס את ה־state, רק תסגור את המשחק הנוכחי
   const handleBackToHome = () => {
-    setWinnerDialogClosed(true); // סגור דיאלוג
     setTimeout(() => setSelectedGame(null), 0); // עבור לדף הבית אחרי סגירה
   };
 
   const handleRestart = () => {
-    setWinnerDialogClosed(true); // סגור דיאלוג
     setTimeout(() => {
-      setWinnerDialogClosed(false); // פתח דיאלוג מחדש אם צריך
       if (gameHookResult && gameHookResult.reset) {
         gameHookResult.reset();
       }
@@ -172,7 +137,7 @@ export default function App() {
   if (!selectedGame) {
     return (
       <StartScreen
-        gameVariants={extendedGameVariants}
+        gameVariants={filteredGameVariants}
         defaultPlayers={settings.players}
         onStart={({ selectedGame, boardSize, players }) => {
           // קבע מספר זוגות לפי boardSize
@@ -195,7 +160,7 @@ export default function App() {
   }
 
   if (selectedGame && gameHookResult) {
-    const { cards, players, currentPlayer, onCardClick, winner, isPopupOpen, reset, timer, pairsFound, totalPairs, moves } = gameHookResult;
+    const { cards, players, currentPlayer, onCardClick, winner, isPopupOpen, timer, pairsFound, totalPairs, moves } = gameHookResult;
     return (
       <GameLayout
         sidePanel={
@@ -238,7 +203,7 @@ export default function App() {
           cardSizeMode={cardSizeMode}
         />
         <WinnerDialog
-          open={isPopupOpen && !winnerDialogClosed}
+          open={isPopupOpen}
           winner={(() => {
             if (!winner || !players.length) return null;
             return { name: winner.name, score: winner.score };
