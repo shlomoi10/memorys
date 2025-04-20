@@ -13,6 +13,7 @@ import { useTripletMemory } from './hooks/useTripletMemory';
 import { useCategoriesMemory } from './hooks/useCategoriesMemory';
 import { useActionCardsMemory } from './hooks/useActionCardsMemory';
 import { useCumulativeScoreMemory } from './hooks/useCumulativeScoreMemory';
+import { useLowScoreMemory } from './hooks/useLowScoreMemory';
 import { GAME_RULES } from './constants/gameRules';
 import { MemorySettings, Player } from './core/BaseMemory';
 import './AppButtons.css';
@@ -77,6 +78,7 @@ export default function App() {
   const triplet = useTripletMemory(settings);
   const categories = useCategoriesMemory(settings);
   const actioncards = useActionCardsMemory(settings);
+  const lowscore = useLowScoreMemory(settings);
 
   const variantMap: Record<string, any> = {
     classic,
@@ -85,13 +87,19 @@ export default function App() {
     triplet,
     categories,
     actioncards,
+    lowscore,
   };
+
+  const extendedGameVariants = [
+    ...gameVariants,
+    { key: 'lowscore', name: 'ניקוד נמוך', hook: useLowScoreMemory },
+  ];
 
   let gameHookResult = selectedGame ? variantMap[selectedGame] : null;
   let gameName = '';
   let gameRules = '';
   if (selectedGame) {
-    const variant = gameVariants.find(g => g.key === selectedGame);
+    const variant = extendedGameVariants.find(g => g.key === selectedGame);
     if (variant) {
       gameName = variant.name;
       gameRules = GAME_RULES[selectedGame] || '';
@@ -164,7 +172,7 @@ export default function App() {
   if (!selectedGame) {
     return (
       <StartScreen
-        gameVariants={gameVariants}
+        gameVariants={extendedGameVariants}
         defaultPlayers={settings.players}
         onStart={({ selectedGame, boardSize, players }) => {
           // קבע מספר זוגות לפי boardSize
@@ -214,6 +222,9 @@ export default function App() {
             onSettings={() => setShowSettings(true)}
             onInfo={() => setShowInfo(true)}
             onBackToHome={handleBackToHome}
+            timer={gameHookResult?.timer}
+            pairsFound={gameHookResult?.pairsFound}
+            totalPairs={gameHookResult?.totalPairs}
           />
         </div>
         <Board

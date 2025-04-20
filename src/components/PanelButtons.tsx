@@ -5,9 +5,12 @@ interface PanelButtonsProps {
   onSettings: () => void;
   onInfo: () => void;
   onBackToHome: () => void;
+  timer?: string;
+  pairsFound?: number;
+  totalPairs?: number;
 }
 
-export default function PanelButtons({ onRestart, onSettings, onInfo, onBackToHome }: PanelButtonsProps) {
+export default function PanelButtons({ onRestart, onSettings, onInfo, onBackToHome, timer, pairsFound, totalPairs }: PanelButtonsProps) {
   const [fixed, setFixed] = React.useState(false);
   const [expanded, setExpanded] = React.useState(true);
   const ref = React.useRef<HTMLDivElement>(null);
@@ -84,6 +87,8 @@ export default function PanelButtons({ onRestart, onSettings, onInfo, onBackToHo
           <button className="game-btn" onClick={onInfo} type="button">מידע וחוקים</button>
           <button className="game-btn" onClick={onBackToHome} type="button">חזרה לדף הבית</button>
         </div>
+        {/* הצגת טיימר וכמות זוגות */}
+        {/* נמחק לבקשת המשתמש */}
       </div>
     </>
   );

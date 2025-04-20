@@ -18,7 +18,7 @@ const PLAYER_COLORS = [
 ];
 
 interface StartScreenProps {
-  gameVariants: { key: string; name: string }[];
+  gameVariants: { key: string; name: string; disabled?: boolean }[];
   defaultPlayers: Player[];
   onStart: (params: { selectedGame: string; boardSize: number; players: Player[] }) => void;
   onPlayersChange?: (players: Player[]) => void;
@@ -86,13 +86,12 @@ export default function StartScreen({
             value={selectedGame}
             exclusive
             onChange={(_, val) => {
-              // לא לאפשר לחיצה על משחקים לא זמינים
-              if (val === 'classic' || val === 'cumulative') setSelectedGame(val);
+              setSelectedGame(val);
             }}
             sx={{ mb: 3, display: 'flex', justifyContent: 'center', overflow: 'hidden', borderRadius: 99, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', boxShadow: '0 2px 12px #1976d244' }}
           >
-            {gameVariants.map((g: { key: string; name: string }, idx) => {
-              const isDisabled = g.key !== 'classic' && g.key !== 'cumulative';
+            {gameVariants.map((g: { key: string; name: string; disabled?: boolean }, idx) => {
+              const isDisabled = !!g.disabled;
               return (
                 <ToggleButton
                   key={g.key}
