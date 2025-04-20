@@ -1,24 +1,24 @@
 .board.spacing-default {
-  gap: 24px;
+  gap: clamp(16px, 3vw, 32px);
 }
 
 .board.spacing-compact {
-  gap: 0px;
+  gap: 4px;
 }
 
 .board.size-small .memory-card {
-  transform: scale(0.65);
+  /* כבר לא צריך scale, הכל width/height דינמי */
   margin: 0 auto;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 950px) {
   .board.spacing-default {
-    gap: 14px;
+    gap: clamp(8px, 1.5vw, 16px);
   }
-  .board.spacing-compact {
-    gap: 0px;
-  }
-  .board.size-small .memory-card {
-    transform: scale(0.53);
+}
+
+@media (max-width: 650px) {
+  .board.spacing-default {
+    gap: 4px;
   }
 }

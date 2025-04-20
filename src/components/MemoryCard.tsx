@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card } from '../core/BaseMemory';
 import { Box, Paper, Typography } from '@mui/material';
 
@@ -14,16 +14,35 @@ interface MemoryCardProps {
 
 export default function MemoryCard({ card, onClick, backColor, disabled, orientation = 'portrait', showName = true, cardSizeMode = 'default' }: MemoryCardProps) {
   const rotate = orientation === 'landscape';
-  // בסיסי:
-  let width = rotate ? 150 : 110;
-  let height = rotate ? 110 : 150;
-  let emojiSize = 44;
-  if (cardSizeMode === 'small') {
-    width = rotate ? 105 : 78;
-    height = rotate ? 78 : 105;
-    emojiSize = 32;
+  // רספונסיבי: חישוב גודל דינמי
+  const vw = Math.max(window.innerWidth, 320);
+  // סדר: קודם המרווח מגיע למינימום, ואז הקלף מתחיל להתקטן
+  let width, height, emojiSize;
+  const baseWidth = rotate ? 150 : 110;
+  const baseHeight = rotate ? 110 : 150;
+  const minWidth = rotate ? 70 : 54;
+  const minHeight = rotate ? 54 : 70;
+  const maxWidth = baseWidth;
+  const maxHeight = baseHeight;
+
+  // שלבים: עד 650px - המרווח במינימום, אחרי זה הקלף מתחיל להתקטן
+  if (vw > 650) {
+    width = Math.round(Math.max(minWidth, Math.min(maxWidth, vw * (rotate ? 0.13 : 0.095))));
+    height = Math.round(Math.max(minHeight, Math.min(maxHeight, vw * (rotate ? 0.095 : 0.13))));
+  } else {
+    // מרווח כבר במינימום, כעת הקלף מתכווץ עד min
+    const ratio = Math.max(0.7, vw / 650); // 1 ב-650px ומעלה, יורד עד 0.7 ב-~450px
+    width = Math.round(maxWidth * ratio);
+    height = Math.round(maxHeight * ratio);
+    if (width < minWidth) width = minWidth;
+    if (height < minHeight) height = minHeight;
   }
-  // אם showName=false ("בלי תגית") - הקטן גובה/רוחב
+  emojiSize = Math.round(Math.max(22, Math.min(44, width * 0.32)));
+  if (cardSizeMode === 'small') {
+    width = Math.round(width * 0.7);
+    height = Math.round(height * 0.7);
+    emojiSize = Math.round(emojiSize * 0.7);
+  }
   if (!showName) {
     if (rotate) {
       width = Math.round(width * 0.77);
