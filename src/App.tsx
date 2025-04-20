@@ -143,7 +143,18 @@ export default function App() {
 
   // חזרה לדף הבית לא תאפס את ה־state, רק תסגור את המשחק הנוכחי
   const handleBackToHome = () => {
-    setSelectedGame(null);
+    setWinnerDialogClosed(true); // סגור דיאלוג
+    setTimeout(() => setSelectedGame(null), 0); // עבור לדף הבית אחרי סגירה
+  };
+
+  const handleRestart = () => {
+    setWinnerDialogClosed(true); // סגור דיאלוג
+    setTimeout(() => {
+      setWinnerDialogClosed(false); // פתח דיאלוג מחדש אם צריך
+      if (gameHookResult && gameHookResult.reset) {
+        gameHookResult.reset();
+      }
+    }, 0);
   };
 
   if (!selectedGame) {
@@ -176,7 +187,7 @@ export default function App() {
     return (
       <GameLayout
         sidePanel={
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, height: '100%', marginBottom: 36 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, height: '100%', marginBottom: '1cm' }}>
             <div style={{ flex: 1, minHeight: 0 }}>
               <SidePanel
                 players={players}
@@ -195,10 +206,10 @@ export default function App() {
       >
         <div style={{ display: 'flex', gap: 14, justifyContent: 'center', margin: '24px 0 12px 0' }}>
           <PanelButtons
-            onRestart={reset}
+            onRestart={handleRestart}
             onSettings={() => setShowSettings(true)}
             onInfo={() => setShowInfo(true)}
-            onBackToHome={() => { reset(); setSelectedGame(null); }}
+            onBackToHome={handleBackToHome}
           />
         </div>
         <Board
@@ -212,9 +223,11 @@ export default function App() {
           cardSizeMode={cardSizeMode}
         />
         <WinnerDialog
-          open={isPopupOpen}
-          winner={winner ? winner.name : ''}
-          onClose={handleWinnerDialogClose}
+          open={isPopupOpen && !winnerDialogClosed}
+          winner={winner && winner.winner ? { name: winner.winner.name, score: winner.winner.score } : null}
+          loser={winner && winner.loser ? { name: winner.loser.name, score: winner.loser.score } : null}
+          onHome={handleBackToHome}
+          onRestart={handleRestart}
         />
         <PlayerSettingsDialog
           open={showSettings}
