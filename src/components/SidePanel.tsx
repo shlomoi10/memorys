@@ -8,6 +8,8 @@ import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined';
 import GroupsIcon from '@mui/icons-material/Groups';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import EmojisDialog from './EmojisDialog';
+import { useAutoScaleToViewport } from './useAutoScaleToViewport';
+import './SidePanel.css';
 
 interface SidePanelProps {
   players: Player[];
@@ -23,16 +25,19 @@ interface SidePanelProps {
 
 export default function SidePanel({ players, currentPlayer, gameName, rules, timer, pairsFound, totalPairs, moves, cards }: SidePanelProps) {
   const [showEmojis, setShowEmojis] = React.useState(false);
+  const [scaleRef, scale] = useAutoScaleToViewport(40);
 
   return (
     <Box
+      ref={scaleRef as any}
       sx={{
-        width: 330,
+        width: 290,
         bgcolor: 'rgba(255,255,255,0.98)',
-        p: 3,
-        borderRadius: 5,
-        boxShadow: '0 6px 32px #1976d233',
-        minHeight: 480,
+        p: 2.2,
+        pt: 5.5,
+        borderRadius: 4,
+        boxShadow: '0 4px 18px #1976d222',
+        minHeight: 320,
         direction: 'rtl',
         display: 'flex',
         flexDirection: 'column',
@@ -40,23 +45,25 @@ export default function SidePanel({ players, currentPlayer, gameName, rules, tim
         fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important',
         fontWeight: 500,
         letterSpacing: 0.5,
-        transition: 'box-shadow 0.3s',
+        transition: 'box-shadow 0.3s, transform 0.18s cubic-bezier(.4,2,.6,1)',
         backdropFilter: 'blur(1.5px)',
-        border: '2.5px solid #e3f0ff',
+        border: '2px solid #e3f0ff',
         position: 'sticky',
-        top: 0,
+        top: 20,
         alignSelf: 'flex-start',
         zIndex: 100,
         height: 'fit-content',
-        maxHeight: 'calc(100vh - 48px)',
+        maxHeight: 'none',
         overflow: 'visible',
+        transform: `scale(${scale})`,
+        transformOrigin: 'top center',
       }}
     >
-      <Box sx={{ position: 'absolute', top: -28, left: 0, right: 0, display: 'flex', justifyContent: 'center', zIndex: 2 }}>
+      <div style={{ display: 'flex', justifyContent: 'center', zIndex: 2, marginTop: '-36px', marginBottom: '2px' }}>
         <Avatar sx={{ bgcolor: '#1976d2', width: 56, height: 56, boxShadow: '0 4px 24px #1976d244', fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', border: '3px solid #fff' }}>
           <SportsEsportsIcon sx={{ fontSize: 34 }} />
         </Avatar>
-      </Box>
+      </div>
       <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2, justifyContent: 'center', mt: 3 }}>
         <Typography variant="h5" sx={{ color: '#1976d2', fontWeight: 900, letterSpacing: 1, fontFamily: 'Heebo, Varela Round, Arial, sans-serif !important', fontSize: 28 }}>{gameName}</Typography>
       </Stack>
