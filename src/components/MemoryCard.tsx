@@ -17,7 +17,7 @@ export default function MemoryCard({ card, onClick, backColor, disabled, orienta
   // רספונסיבי: חישוב גודל דינמי
   const vw = Math.max(window.innerWidth, 320);
   // סדר: קודם המרווח מגיע למינימום, ואז הקלף מתחיל להתקטן
-  let width, height, emojiSize;
+  let width, height, emojiSize, nameFontSize;
   const baseWidth = rotate ? 150 : 110;
   const baseHeight = rotate ? 110 : 150;
   const minWidth = rotate ? 70 : 54;
@@ -37,11 +37,13 @@ export default function MemoryCard({ card, onClick, backColor, disabled, orienta
     if (width < minWidth) width = minWidth;
     if (height < minHeight) height = minHeight;
   }
-  emojiSize = Math.round(Math.max(22, Math.min(44, width * 0.32)));
+  // שינוי: גודל אימוג'י ותגית תלוי בגודל הקלף
   if (cardSizeMode === 'small') {
-    width = Math.round(width * 0.7);
-    height = Math.round(height * 0.7);
-    emojiSize = Math.round(emojiSize * 0.7);
+    emojiSize = Math.round(Math.max(22, Math.min(44, width * 0.32)));
+    nameFontSize = 13;
+  } else {
+    emojiSize = Math.round(Math.max(36, Math.min(64, width * 0.48)));
+    nameFontSize = 22;
   }
   if (!showName) {
     if (rotate) {
@@ -104,7 +106,7 @@ export default function MemoryCard({ card, onClick, backColor, disabled, orienta
                   display: 'block',
                   fontFamily: 'Heebo, Varela Round, Arial, sans-serif',
                   fontWeight: 700,
-                  fontSize: cardSizeMode === 'small' ? 13 : 16,
+                  fontSize: nameFontSize,
                   color: '#1976d2',
                   margin: 0,
                   marginTop: 3,
