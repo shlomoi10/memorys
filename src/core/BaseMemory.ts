@@ -33,6 +33,7 @@ export interface MemorySettings {
   cardOrientation?: 'portrait' | 'landscape'; // חדש: אורך/רוחב
   cardNameMode?: 'default' | 'none';
   spacingMode?: 'default' | 'compact';
+  cardSizeMode?: 'default' | 'small';
 }
 
 export interface MemoryState {

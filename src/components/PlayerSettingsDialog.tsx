@@ -16,15 +16,18 @@ interface PlayerSettingsDialogProps {
   onCardNameModeChange?: (mode: 'default' | 'none') => void;
   spacingMode?: 'default' | 'compact';
   onSpacingModeChange?: (mode: 'default' | 'compact') => void;
+  cardSizeMode?: 'default' | 'small';
+  onCardSizeModeChange?: (mode: 'default' | 'small') => void;
 }
 
 const colorOptions = ['#2196f3', '#4caf50', '#ff9800', '#e91e63', '#795548', '#607d8b'];
 
-export default function PlayerSettingsDialog({ open, players, onChange, onClose, cardOrientation = 'portrait', onCardOrientationChange, cardNameMode = 'default', onCardNameModeChange, spacingMode = 'default', onSpacingModeChange }: PlayerSettingsDialogProps) {
+export default function PlayerSettingsDialog({ open, players, onChange, onClose, cardOrientation = 'portrait', onCardOrientationChange, cardNameMode = 'default', onCardNameModeChange, spacingMode = 'default', onSpacingModeChange, cardSizeMode = 'default', onCardSizeModeChange }: PlayerSettingsDialogProps) {
   const [localPlayers, setLocalPlayers] = useState(players);
   const [localOrientation, setLocalOrientation] = useState<'portrait' | 'landscape'>(cardOrientation);
   const [localCardNameMode, setLocalCardNameMode] = useState<'default' | 'none'>(cardNameMode);
   const [localSpacingMode, setLocalSpacingMode] = useState<'default' | 'compact'>(spacingMode);
+  const [localCardSizeMode, setLocalCardSizeMode] = useState<'default' | 'small'>(cardSizeMode);
 
   useEffect(() => {
     if (open) {
@@ -32,8 +35,9 @@ export default function PlayerSettingsDialog({ open, players, onChange, onClose,
       setLocalOrientation(cardOrientation);
       setLocalCardNameMode(cardNameMode);
       setLocalSpacingMode(spacingMode);
+      setLocalCardSizeMode(cardSizeMode);
     }
-  }, [players, open, cardOrientation, cardNameMode, spacingMode]);
+  }, [players, open, cardOrientation, cardNameMode, spacingMode, cardSizeMode]);
 
   const handleNameChange = (idx: number, value: string) => {
     const updated = [...localPlayers];
@@ -55,6 +59,9 @@ export default function PlayerSettingsDialog({ open, players, onChange, onClose,
     }
     if (onSpacingModeChange) {
       onSpacingModeChange(localSpacingMode);
+    }
+    if (onCardSizeModeChange) {
+      onCardSizeModeChange(localCardSizeMode);
     }
     onClose();
   };
@@ -131,6 +138,8 @@ export default function PlayerSettingsDialog({ open, players, onChange, onClose,
             onCardNameModeChange={setLocalCardNameMode}
             spacingMode={localSpacingMode}
             onSpacingModeChange={setLocalSpacingMode}
+            cardSizeMode={localCardSizeMode}
+            onCardSizeModeChange={setLocalCardSizeMode}
           />
         </Box>
       </DialogContent>

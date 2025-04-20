@@ -11,9 +11,10 @@ interface BoardProps {
   cardOrientation?: 'portrait' | 'landscape';
   cardNameMode?: 'default' | 'none';
   spacingMode?: 'default' | 'compact';
+  cardSizeMode?: 'default' | 'small';
 }
 
-export default function Board({ cards, onCardClick, currentPlayerColor, boardSize, cardOrientation = 'portrait', cardNameMode = 'default', spacingMode = 'default' }: BoardProps) {
+export default function Board({ cards, onCardClick, currentPlayerColor, boardSize, cardOrientation = 'portrait', cardNameMode = 'default', spacingMode = 'default', cardSizeMode = 'default' }: BoardProps) {
   // פריסה תמיד מרובעת: מספר עמודות = שורש ריבועי של מספר הקלפים
   let columns = 4;
   if (boardSize && boardSize > 0) {
@@ -23,7 +24,7 @@ export default function Board({ cards, onCardClick, currentPlayerColor, boardSiz
   }
 
   return (
-    <div className={`board board-size-${boardSize} orientation-${cardOrientation} spacing-${spacingMode}`} style={{ display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, justifyContent: 'center', margin: '40px 0' }}>
+    <div className={`board board-size-${boardSize} orientation-${cardOrientation} spacing-${spacingMode} size-${cardSizeMode}`} style={{ display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, justifyContent: 'center', margin: '40px 0' }}>
       {cards.map(card => (
         <MemoryCard
           key={card.id}
@@ -33,6 +34,7 @@ export default function Board({ cards, onCardClick, currentPlayerColor, boardSiz
           disabled={card.isMatched}
           orientation={cardOrientation}
           showName={cardNameMode === 'default'}
+          cardSizeMode={cardSizeMode}
         />
       ))}
     </div>

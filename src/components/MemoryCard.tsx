@@ -9,15 +9,25 @@ interface MemoryCardProps {
   disabled?: boolean;
   orientation?: 'portrait' | 'landscape';
   showName?: boolean;
+  cardSizeMode?: 'default' | 'small';
 }
 
-export default function MemoryCard({ card, onClick, backColor, disabled, orientation = 'portrait', showName = true }: MemoryCardProps) {
+export default function MemoryCard({ card, onClick, backColor, disabled, orientation = 'portrait', showName = true, cardSizeMode = 'default' }: MemoryCardProps) {
   const rotate = orientation === 'landscape';
+  // בסיסי:
+  let width = rotate ? 150 : 110;
+  let height = rotate ? 110 : 150;
+  let emojiSize = 44;
+  if (cardSizeMode === 'small') {
+    width = rotate ? 105 : 78;
+    height = rotate ? 78 : 105;
+    emojiSize = 32;
+  }
   return (
     <Box sx={{
       perspective: 900,
-      width: rotate ? 150 : 110,
-      height: rotate ? 110 : 150,
+      width,
+      height,
       m: 1.2,
       display: 'inline-block',
       transition: 'width 0.35s, height 0.35s',
@@ -27,8 +37,8 @@ export default function MemoryCard({ card, onClick, backColor, disabled, orienta
         <Paper
           elevation={card.isOpen ? 12 : 3}
           sx={{
-            width: rotate ? 150 : 110,
-            height: rotate ? 110 : 150,
+            width,
+            height,
             borderRadius: 5,
             boxShadow: card.isOpen ? '0 8px 32px rgba(25,118,210,0.18)' : '0 2px 12px rgba(25,118,210,0.10)',
             background: card.isOpen ? 'linear-gradient(135deg, #f8fafc 60%, #e3eafc 100%)' : `linear-gradient(135deg, ${backColor} 70%, #b6c9ff 120%)`,
@@ -36,7 +46,7 @@ export default function MemoryCard({ card, onClick, backColor, disabled, orienta
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: 44,
+            fontSize: cardSizeMode === 'small' ? 28 : 44,
             cursor: disabled || card.isOpen ? 'default' : 'pointer',
             transition: 'background 0.35s, box-shadow 0.35s, width 0.35s, height 0.35s',
             position: 'relative',
@@ -50,13 +60,13 @@ export default function MemoryCard({ card, onClick, backColor, disabled, orienta
               {/* אימוג'י SVG */}
               {card.emoji.src && (
                 <Box sx={{
-                  width: 56, height: 56, mx: 'auto', mb: 0.5,
+                  width: emojiSize, height: emojiSize, mx: 'auto', mb: 0.5,
                   borderRadius: '50%',
                   background: 'linear-gradient(135deg, #e3eafc 60%, #fff 100%)',
                   boxShadow: '0 2px 10px #1976d222',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <img src={card.emoji.src} alt={card.emoji.shortName} style={{ width: 44, height: 44, filter: 'drop-shadow(0 1.5px 2px #1976d233)' }} />
+                  <img src={card.emoji.src} alt={card.emoji.shortName} style={{ width: emojiSize - 12, height: emojiSize - 12, filter: 'drop-shadow(0 1.5px 2px #1976d233)' }} />
                 </Box>
               )}
               {/* שם האימוג'י */}
