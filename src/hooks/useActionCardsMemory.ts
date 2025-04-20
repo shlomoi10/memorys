@@ -89,13 +89,6 @@ export function useActionCardsMemory(settings: MemorySettings) {
     }
   }, [cards, players]);
 
-  // מגבלת זוגות רגילים לפי רמת קושי
-  function getLimitedNumPairs(numPairs?: number) {
-    if (!numPairs || numPairs <= 7) return 7; // קל
-    if (numPairs <= 17) return 17; // בינוני
-    return 31; // קשה
-  }
-
   // זוגות שנמצאו וסך-הכל זוגות (בשביל הפאנל)
   const pairsFound = cards.filter(c => c.isMatched).length / 2;
   const totalPairs = cards.length / 2;
@@ -191,14 +184,14 @@ export function useActionCardsMemory(settings: MemorySettings) {
 
   // עדכון פונקציית יצירת קלפים
   function generateCards(numPairs: number) {
-    const limitedPairs = getLimitedNumPairs(numPairs);
-    const emojis = getAvailableEmojis(limitedPairs);
+    // תמיד זוג אחד פחות קלפים רגילים, ועוד 2 קלפי פעולה
+    const pairsToUse = Math.max(1, numPairs - 1); // לפחות זוג אחד
+    const emojis = getAvailableEmojis(pairsToUse);
     let newCards: Card[] = [];
     for (let i = 0; i < emojis.length; i++) {
       newCards.push({ id: `${i}-a`, emoji: emojis[i], type: 'normal', isOpen: false, isMatched: false });
       newCards.push({ id: `${i}-b`, emoji: emojis[i], type: 'normal', isOpen: false, isMatched: false });
     }
-    // הוספת קלפי פעולה
     newCards.push({ ...ACTION_CARDS[0] });
     newCards.push({ ...ACTION_CARDS[1] });
     // ערבוב

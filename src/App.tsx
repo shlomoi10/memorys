@@ -10,6 +10,7 @@ import PanelButtons from './components/PanelButtons';
 import { useClassicMemory } from './hooks/useClassicMemory';
 import { useCumulativeScoreMemory } from './hooks/useCumulativeScoreMemory';
 import { useLowScoreMemory } from './hooks/useLowScoreMemory';
+import { useActionCardsMemory } from './hooks/useActionCardsMemory';
 import { GAME_RULES } from './constants/gameRules';
 import { MemorySettings, Player } from './core/BaseMemory';
 import './AppButtons.css';
@@ -22,6 +23,7 @@ const defaultPlayers: Player[] = [
 const gameVariants = [
   { key: 'classic', name: 'זיכרון קלאסי', hook: useClassicMemory },
   { key: 'cumulative', name: 'ניקוד מצטבר', hook: useCumulativeScoreMemory },
+  { key: 'action', name: 'קלפי פעולה', hook: useActionCardsMemory },
 ];
 
 export default function App() {
@@ -54,11 +56,13 @@ export default function App() {
   const classic = useClassicMemory(settings);
   const cumulative = useCumulativeScoreMemory(settings);
   const lowscore = useLowScoreMemory(settings);
+  const action = useActionCardsMemory(settings);
 
   const variantMap: Record<string, any> = {
     classic,
     cumulative,
     lowscore,
+    action,
   };
 
   const extendedGameVariants = [
