@@ -224,8 +224,19 @@ export default function App() {
         />
         <WinnerDialog
           open={isPopupOpen && !winnerDialogClosed}
-          winner={winner && winner.winner ? { name: winner.winner.name, score: winner.winner.score } : null}
-          loser={winner && winner.loser ? { name: winner.loser.name, score: winner.loser.score } : null}
+          winner={(() => {
+            if (!winner || !players.length) return null;
+            return { name: winner.name, score: winner.score };
+          })()}
+          loser={(() => {
+            if (!winner || !players.length) return null;
+            // מצא את המפסיד: שחקן עם הניקוד הנמוך ביותר, לא המנצח
+            const losers = players.filter((p: any) => p.name !== winner.name);
+            if (!losers.length) return null;
+            let minScore = Math.min(...losers.map((p: any) => p.score));
+            const loser = losers.find((p: any) => p.score === minScore) || losers[0];
+            return { name: loser.name, score: loser.score };
+          })()}
           onHome={handleBackToHome}
           onRestart={handleRestart}
         />

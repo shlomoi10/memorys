@@ -47,19 +47,10 @@ export default function WinnerDialog({ open, winner, loser, onRestart, onHome }:
         <div className="winner-dialog-body">
           <Confetti />
           <div className="winner-dialog-winner-row">
-            <span className="winner-name">{winner?.name || '—'}</span>
-            <span className="winner-score">{winner?.score ?? '—'}</span>
-            <span className="winner-label">מנצח/ת</span>
-          </div>
-          <div className="winner-dialog-vs-row">
-            <span className="vs-label">ניקוד</span>
-            <span className="vs-sep">|</span>
-            <span className="vs-label">ניקוד</span>
+            <span className="winner-label">שחקן {winner?.name ?? '—'} עם {winner?.score ?? '—'} נקודות</span>
           </div>
           <div className="winner-dialog-loser-row">
-            <span className="loser-name">{loser?.name || '—'}</span>
-            <span className="loser-score">{loser?.score ?? '—'}</span>
-            <span className="loser-label">מפסיד/ה</span>
+            <span className="loser-label">שחקן {loser?.name ?? '—'} עם {loser?.score ?? '—'} נקודות</span>
           </div>
         </div>
         <div className="winner-dialog-actions-row">
