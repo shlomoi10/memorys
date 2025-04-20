@@ -11,7 +11,7 @@ interface EmojisDialogProps {
 
 export default function EmojisDialog({ open, onClose, cards }: EmojisDialogProps) {
   // הפוך את רשימת האימוג'ים לייחודית
-  const uniqueEmojis = Array.from(new Map(cards.map(card => [card.emoji.shortName, card.emoji])).values());
+  const uniqueEmojis = Array.from(new Map(cards.map(card => [card.emoji.shortName, card])).values());
   // מצא אילו קלפים נמצאו (isMatched=true)
   const foundShortNames = new Set(cards.filter(card => card.isMatched).map(card => card.emoji.shortName));
 
@@ -19,19 +19,19 @@ export default function EmojisDialog({ open, onClose, cards }: EmojisDialogProps
     <Dialog open={open} onClose={onClose} dir="rtl" maxWidth="sm" fullWidth>
       <DialogTitle sx={{ fontFamily: 'Heebo, Varela Round, Arial, sans-serif', fontWeight: 900, fontSize: 24, color: '#1976d2', textAlign: 'right', letterSpacing: 1 }}>קלפים משתתפים</DialogTitle>
       <DialogContent sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center', bgcolor: 'rgba(255,255,255,0.98)', py: 3, fontFamily: 'Heebo, Varela Round, Arial, sans-serif', fontWeight: 500, fontSize: 20 }}>
-        {uniqueEmojis.map(emoji => (
-          <Tooltip key={emoji.shortName} title={emoji.name} arrow
+        {uniqueEmojis.map(card => (
+          <Tooltip key={card.emoji.shortName} title={card.emoji.name} arrow
             componentsProps={{ tooltip: { sx: { fontFamily: 'Heebo, Varela Round, Arial, sans-serif', fontWeight: 700, fontSize: 17 } } }}
           >
             <Box sx={{
               width: 58,
               height: 58,
               borderRadius: 3,
-              bgcolor: foundShortNames.has(emoji.shortName) ? '#e3f0ff' : '#fff',
-              border: foundShortNames.has(emoji.shortName)
+              bgcolor: foundShortNames.has(card.emoji.shortName) ? '#e3f0ff' : '#fff',
+              border: foundShortNames.has(card.emoji.shortName)
                 ? '3px solid #4caf50'
                 : '2px solid #e3f0ff',
-              boxShadow: foundShortNames.has(emoji.shortName)
+              boxShadow: foundShortNames.has(card.emoji.shortName)
                 ? '0 0 16px #4caf5055'
                 : '0 2px 8px #1976d211',
               display: 'flex',
@@ -42,9 +42,22 @@ export default function EmojisDialog({ open, onClose, cards }: EmojisDialogProps
               fontSize: 34,
               m: 0.5,
               fontFamily: 'Heebo, Varela Round, Arial, sans-serif',
+              flexDirection: 'column',
+              gap: 0.5,
             }}>
-              <img src={emoji.src} alt={emoji.name} style={{ width: 36, height: 36 }} />
-              {foundShortNames.has(emoji.shortName) && (
+              <img src={card.emoji.src} alt={card.emoji.name} style={{ width: 36, height: 36 }} />
+              {/* הצגת סכום הניקוד (רק מספר) מתחת לאייקון, אם קיים pairScore */}
+              {typeof card.pairScore === 'number' && (
+                <div style={{
+                  fontWeight: 900,
+                  fontSize: 18,
+                  color: '#1976d2',
+                  marginTop: 2,
+                  lineHeight: 1,
+                  fontFamily: 'Heebo, Varela Round, Arial, sans-serif',
+                }}>{card.pairScore}</div>
+              )}
+              {foundShortNames.has(card.emoji.shortName) && (
                 <CheckCircleIcon sx={{ position: 'absolute', top: -8, left: -8, color: '#4caf50', fontSize: 28, filter: 'drop-shadow(0 2px 8px #4caf5066)' }} />
               )}
             </Box>
